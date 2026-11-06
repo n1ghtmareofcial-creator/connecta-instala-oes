@@ -1,239 +1,1270 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#071827">
-  <meta name="robots" content="noindex,nofollow">
-  <title>Administração | Connecta Instalações</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/admin/admin.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Connecta Instalações, Soluções em Infraestrutura Elétrica e Industrial</title>
+<meta name="description" content="Connecta Instalações: soluções em instalações elétricas, montagem de quadros elétricos, redes de dados, automação industrial e detecção de incêndio.">
+<meta property="og:title" content="Connecta Instalações, Infraestrutura Elétrica e Industrial">
+<meta property="og:description" content="Soluções em instalações elétricas, infraestrutura tecnológica, sistemas de segurança e automação industrial.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F7FAFD">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+ --navy: #071827;
+ --blue: #0877C9;
+ --blue-light: #1a8fe0;
+ --white: #FFFFFF;
+ --gray-metal: #AEBBC7;
+ --gray-light: #F3F5F7;
+ --gray-mid: #6B7A8D;
+ --line: 1px solid rgba(174,187,199,0.25);
+ box-sizing: border-box;
+ padding-top: env(safe-area-inset-top, 0px);
+ padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+*, *::before, *::after { box-sizing: inherit; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+html, body { height: 100%; }
+body { font-family: 'Manrope', sans-serif; background: var(--white); color: var(--navy); -webkit-font-smoothing: antialiased; }
+
+/* SKIP LINK */
+.skip-link { position: absolute; top: -100%; left: 1rem; background: var(--blue); color: #fff; padding: .5rem 1rem; border-radius: 0 0 4px 4px; z-index: 9999; font-size: .875rem; }
+.skip-link:focus { top: 0; }
+
+/* HEADER */
+header {
+ position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+ background: rgba(7,24,39,0.96); backdrop-filter: blur(12px);
+ border-bottom: 1px solid rgba(8,119,201,0.3);
+ transition: background .3s;
+}
+.header-inner {
+ max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+ display: flex; align-items: center; justify-content: space-between;
+ height: 72px;
+}
+.logo { display: flex; flex-direction: column; gap: 1px; text-decoration: none; }
+.logo-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.3rem; letter-spacing: .08em; color: var(--white); line-height: 1; }
+.logo-tag { font-size: .6rem; letter-spacing: .22em; color: var(--blue); text-transform: uppercase; font-weight: 500; }
+.logo-bar { width: 100%; height: 2px; background: var(--blue); margin-top: 3px; }
+
+nav { display: flex; align-items: center; gap: 2.5rem; }
+nav a { color: var(--gray-metal); text-decoration: none; font-size: .85rem; font-weight: 500; letter-spacing: .04em; transition: color .2s; position: relative; }
+nav a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1.5px; background: var(--blue); transition: width .25s; }
+nav a:hover, nav a:focus { color: var(--white); outline: none; }
+nav a:hover::after, nav a:focus::after { width: 100%; }
+
+.btn-nav {
+ padding: .55rem 1.4rem; border-radius: 2px;
+ background: var(--blue); color: #fff; font-size: .8rem; font-weight: 600;
+ letter-spacing: .06em; border: none; cursor: pointer; text-decoration: none;
+ transition: background .2s, transform .15s;
+}
+.btn-nav:hover { background: var(--blue-light); transform: translateY(-1px); }
+.btn-nav:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: all .25s; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-nav {
+ display: none; position: fixed; inset: 72px 0 0 0; background: rgba(7,24,39,0.98);
+ flex-direction: column; padding: 2rem; gap: 1.5rem; z-index: 99; overflow-y: auto;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a { color: var(--white); font-size: 1.3rem; font-family: 'Sora', sans-serif; font-weight: 600; letter-spacing: .06em; text-decoration: none; padding: .5rem 0; border-bottom: 1px solid rgba(174,187,199,0.15); }
+
+/* HERO */
+#hero {
+ min-height: 100vh; position: relative; display: flex; align-items: center;
+ background: var(--navy);
+ overflow: hidden;
+}
+.hero-bg {
+ position: absolute; inset: 0;
+ background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80');
+ background-size: cover; background-position: center;
+ opacity: .18; filter: grayscale(30%);
+}
+.hero-grid {
+ position: absolute; inset: 0;
+ background-image: linear-gradient(rgba(8,119,201,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(8,119,201,.06) 1px, transparent 1px);
+ background-size: 60px 60px;
+}
+.hero-overlay {
+ position: absolute; inset: 0;
+ background: linear-gradient(135deg, rgba(7,24,39,.95) 0%, rgba(7,24,39,.75) 60%, rgba(7,24,39,.5) 100%);
+}
+.hero-content {
+ position: relative; z-index: 2;
+ max-width: 1200px; margin: 0 auto; padding: 8rem 2rem 5rem;
+ display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+}
+.hero-left { max-width: 580px; }
+.hero-eyebrow {
+ display: flex; align-items: center; gap: .75rem; margin-bottom: 1.75rem;
+}
+.hero-eyebrow span { font-size: .7rem; letter-spacing: .3em; text-transform: uppercase; color: var(--blue); font-weight: 600; }
+.hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1.5px; background: var(--blue); flex-shrink: 0; }
+
+h1 {
+ font-family: 'Sora', sans-serif;
+ font-size: clamp(2.8rem, 6vw, 4.5rem);
+ font-weight: 800; line-height: 1.0; color: var(--white);
+ letter-spacing: -.01em; margin-bottom: 1.5rem;
+}
+h1 em { font-style: normal; color: var(--blue); }
+
+.hero-sub { font-size: 1rem; color: var(--gray-metal); line-height: 1.75; max-width: 460px; margin-bottom: 2.5rem; font-weight: 300; }
+
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary {
+ padding: .85rem 2rem; background: var(--blue); color: #fff;
+ font-weight: 600; font-size: .875rem; letter-spacing: .05em;
+ border: none; border-radius: 2px; cursor: pointer; text-decoration: none;
+ transition: background .2s, transform .15s, box-shadow .2s;
+ display: inline-flex; align-items: center; gap: .5rem;
+}
+.btn-primary:hover { background: var(--blue-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(8,119,201,.4); }
+.btn-primary:focus { outline: 2px solid #fff; outline-offset: 2px; }
+.btn-secondary {
+ padding: .85rem 2rem; background: transparent; color: var(--white);
+ font-weight: 500; font-size: .875rem; letter-spacing: .05em;
+ border: 1px solid rgba(174,187,199,.4); border-radius: 2px; cursor: pointer; text-decoration: none;
+ transition: border-color .2s, color .2s, transform .15s;
+ display: inline-flex; align-items: center; gap: .5rem;
+}
+.btn-secondary:hover { border-color: var(--blue); color: var(--blue); transform: translateY(-2px); }
+.btn-secondary:focus { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+.hero-right { display: flex; flex-direction: column; gap: 1.5rem; }
+.hero-stat {
+ background: rgba(255,255,255,.04); border: 1px solid rgba(174,187,199,.12);
+ border-left: 3px solid var(--blue); padding: 1.25rem 1.5rem;
+ display: flex; flex-direction: column; gap: .3rem;
+}
+.hero-stat-label { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gray-mid); font-weight: 500; }
+.hero-stat-value { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--white); }
+
+.hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .5rem; z-index: 2; }
+.hero-scroll span { font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gray-mid); }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--blue), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* SECTION SHARED */
+.section { padding: 6rem 2rem; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-label {
+ display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem;
+}
+.section-label span { font-size: .68rem; letter-spacing: .28em; text-transform: uppercase; color: var(--blue); font-weight: 600; }
+.section-label::before { content: ''; display: block; width: 24px; height: 1.5px; background: var(--blue); }
+h2 {
+ font-family: 'Sora', sans-serif;
+ font-size: clamp(2rem, 4vw, 3rem); font-weight: 700;
+ letter-spacing: -.01em; line-height: 1.1; color: var(--navy);
+}
+h2.on-dark { color: var(--white); }
+.section-line { width: 48px; height: 2px; background: var(--blue); margin: 1.25rem 0; }
+
+/* ABOUT */
+#sobre { background: var(--white); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.about-visual {
+ position: relative; height: 420px;
+ background: url('https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=800&q=80') center/cover;
+}
+.about-visual::before {
+ content: ''; position: absolute; top: -16px; left: -16px; right: 16px; bottom: 16px;
+ border: 2px solid var(--blue); z-index: 0; pointer-events: none;
+}
+.about-visual::after {
+ content: ''; position: absolute; inset: 0;
+ background: linear-gradient(135deg, rgba(7,24,39,.3), transparent);
+}
+.about-badge {
+ position: absolute; bottom: -1rem; right: -1rem; z-index: 2;
+ background: var(--blue); padding: 1.25rem 1.5rem; color: #fff;
+}
+.about-badge strong { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 800; display: block; }
+.about-badge span { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; opacity: .85; }
+
+.about-text p { font-size: .95rem; line-height: 1.8; color: #3a4a5a; margin-bottom: 1.25rem; font-weight: 300; max-width: 500px; }
+.about-pillars { display: flex; flex-direction: column; gap: .75rem; margin-top: 2rem; }
+.pillar { display: flex; align-items: flex-start; gap: 1rem; }
+.pillar-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: .55rem; }
+.pillar-text { font-size: .875rem; color: var(--navy); font-weight: 500; }
+
+/* SERVICES */
+#servicos { background: var(--gray-light); }
+.services-header { text-align: left; margin-bottom: 3.5rem; }
+.services-header p { font-size: .95rem; color: var(--gray-mid); max-width: 500px; margin-top: .75rem; line-height: 1.7; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: rgba(174,187,199,.3); }
+.service-card {
+ background: var(--white); padding: 2.5rem 2rem;
+ position: relative; overflow: hidden;
+ transition: transform .25s, box-shadow .25s;
+ display: flex; flex-direction: column; gap: 1rem;
+ cursor: default;
+}
+.service-card::before {
+ content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+ height: 3px; background: var(--blue); transform: scaleX(0); transform-origin: left;
+ transition: transform .3s;
+}
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(7,24,39,.12); z-index: 1; }
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+ width: 48px; height: 48px; border-radius: 2px;
+ background: rgba(8,119,201,.08); display: flex; align-items: center; justify-content: center;
+ flex-shrink: 0;
+}
+.service-icon svg { width: 24px; height: 24px; stroke: var(--blue); fill: none; stroke-width: 1.5; }
+.service-num { font-family: 'Sora', sans-serif; font-size: .75rem; letter-spacing: .2em; color: var(--blue); font-weight: 600; }
+h3 { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--navy); letter-spacing: .02em; line-height: 1.2; }
+.service-desc { font-size: .85rem; color: var(--gray-mid); line-height: 1.65; }
+
+/* DIFERENCIAIS */
+#diferenciais { background: var(--navy); padding: 6rem 2rem; }
+.diferenciais-inner { max-width: 1200px; margin: 0 auto; }
+.diferenciais-header { margin-bottom: 4rem; }
+.diferenciais-header .section-label span { color: rgba(8,119,201,.9); }
+.diferenciais-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: rgba(174,187,199,.1); }
+.diferencial-item {
+ background: rgba(255,255,255,.03); padding: 2.5rem;
+ border-top: 1px solid rgba(174,187,199,.1);
+ transition: background .2s;
+}
+.diferencial-item:hover { background: rgba(8,119,201,.08); }
+.diferencial-num { font-family: 'Sora', sans-serif; font-size: .7rem; letter-spacing: .3em; color: var(--blue); margin-bottom: 1rem; font-weight: 600; }
+.diferencial-title { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--white); margin-bottom: .75rem; letter-spacing: .02em; }
+.diferencial-desc { font-size: .85rem; color: var(--gray-metal); line-height: 1.7; font-weight: 300; max-width: 380px; }
+
+/* CONTATO */
+#contato { background: var(--white); }
+.contato-grid { display: grid; grid-template-columns: 1fr 1.6fr; gap: 5rem; align-items: start; }
+.contato-info { }
+.contato-info p { font-size: .95rem; color: #3a4a5a; line-height: 1.75; margin: 1.25rem 0 2.5rem; font-weight: 300; }
+.contato-items { display: flex; flex-direction: column; gap: 1.5rem; }
+.contato-item { display: flex; align-items: flex-start; gap: 1rem; }
+.contato-item-icon { width: 40px; height: 40px; background: rgba(8,119,201,.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: 2px; }
+.contato-item-icon svg { width: 18px; height: 18px; stroke: var(--blue); fill: none; stroke-width: 1.5; }
+.contato-item-label { font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gray-mid); font-weight: 600; }
+.contato-item-value { font-size: .9rem; color: var(--navy); font-weight: 500; margin-top: .2rem; }
+
+/* FORM */
+.contact-form { display: flex; flex-direction: column; gap: 1.25rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+.field { display: flex; flex-direction: column; gap: .4rem; }
+.field label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--navy); font-weight: 600; }
+.field input, .field select, .field textarea {
+ border: 1px solid #d0d8e0; border-radius: 2px;
+ padding: .75rem 1rem; font-family: 'Manrope', sans-serif; font-size: .9rem;
+ color: var(--navy); background: var(--white); transition: border-color .2s, box-shadow .2s;
+ width: 100%; outline: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(8,119,201,.12);
+}
+.field input.error, .field select.error, .field textarea.error { border-color: #e53e3e; }
+.field-error { font-size: .75rem; color: #e53e3e; }
+.field textarea { resize: vertical; min-height: 120px; }
+.field select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23AEBBC7' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; }
+
+.form-submit { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+.form-note { font-size: .75rem; color: var(--gray-mid); }
+
+.form-status {
+ padding: 1rem 1.25rem; border-radius: 2px; font-size: .875rem; font-weight: 500;
+ display: none; margin-top: .5rem;
+}
+.form-status.success { background: rgba(72,187,120,.12); color: #276749; border: 1px solid rgba(72,187,120,.3); display: block; }
+.form-status.error-msg { background: rgba(229,62,62,.08); color: #9b2c2c; border: 1px solid rgba(229,62,62,.2); display: block; }
+.form-status.loading { background: rgba(8,119,201,.08); color: var(--blue); border: 1px solid rgba(8,119,201,.2); display: block; }
+
+/* FOOTER */
+footer { background: #040f18; border-top: 1px solid rgba(8,119,201,.25); }
+.footer-main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 2.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; }
+.footer-brand p { font-size: .85rem; color: var(--gray-mid); line-height: 1.7; margin: 1rem 0 1.5rem; max-width: 300px; font-weight: 300; }
+.footer-cnpj { font-size: .72rem; color: rgba(174,187,199,.5); letter-spacing: .05em; }
+.footer-col h4 { font-family: 'Sora', sans-serif; font-size: .75rem; letter-spacing: .25em; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 1.25rem; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .65rem; }
+.footer-col ul li a { color: var(--gray-metal); text-decoration: none; font-size: .875rem; font-weight: 300; transition: color .2s; }
+.footer-col ul li a:hover, .footer-col ul li a:focus { color: var(--white); }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(174,187,199,.1); flex-wrap: wrap; gap: .5rem; }
+.footer-bottom span { font-size: .75rem; color: rgba(174,187,199,.4); }
+
+/* 404 */
+#not-found { display: none; position: fixed; inset: 0; background: var(--navy); z-index: 999; align-items: center; justify-content: center; flex-direction: column; text-align: center; padding: 2rem; }
+#not-found h2 { font-family: 'Sora', sans-serif; font-size: 8rem; font-weight: 800; color: var(--blue); opacity: .3; line-height: 1; }
+#not-found p { color: var(--white); font-size: 1.1rem; margin: 1rem 0 2rem; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+ .hero-content { grid-template-columns: 1fr; }
+ .hero-right { display: none; }
+ .about-grid { grid-template-columns: 1fr; }
+ .about-visual { height: 320px; }
+ .about-visual::before { display: none; }
+ .services-grid { grid-template-columns: repeat(2, 1fr); }
+ .diferenciais-grid { grid-template-columns: 1fr; }
+ .contato-grid { grid-template-columns: 1fr; gap: 3rem; }
+ .footer-main { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+ .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 768px) {
+ nav { display: none; }
+ .hamburger { display: flex; }
+ .services-grid { grid-template-columns: 1fr; }
+ .form-row { grid-template-columns: 1fr; }
+ .footer-main { grid-template-columns: 1fr; gap: 2rem; }
+ .footer-brand { grid-column: unset; }
+ .footer-bottom { flex-direction: column; text-align: center; }
+ h1 { font-size: 2.5rem; }
+ .section { padding: 4rem 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+ *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+
+/* WhatsApp float */
+.wpp-float {
+ position: fixed; bottom: 2rem; right: 2rem; z-index: 90;
+ width: 52px; height: 52px; border-radius: 50%;
+ background: #25D366; display: flex; align-items: center; justify-content: center;
+ box-shadow: 0 4px 20px rgba(37,211,102,.4); text-decoration: none;
+ transition: transform .2s, box-shadow .2s;
+}
+.wpp-float:hover { transform: scale(1.1); box-shadow: 0 8px 28px rgba(37,211,102,.5); }
+.wpp-float svg { width: 28px; height: 28px; fill: #fff; }
+
+/* =========================================================
+  CONNECTA VISUAL REFRESH
+  Mais branco, profundidade, cor e movimento com moderação.
+  ========================================================= */
+:root {
+ --navy: #10263B;
+ --blue: #0877C9;
+ --blue-light: #269BE8;
+ --cyan: #25B8D5;
+ --teal: #16A69A;
+ --amber: #E6A23C;
+ --white: #FFFFFF;
+ --gray-metal: #AAB9C8;
+ --gray-light: #F4F8FC;
+ --gray-mid: #687B8F;
+ --ink-soft: #344B60;
+ --line: 1px solid rgba(16,38,59,.10);
+ --shadow-soft: 0 18px 55px rgba(16,38,59,.09);
+ --shadow-blue: 0 18px 50px rgba(8,119,201,.16);
+}
+html { scroll-behavior: smooth; }
+body {
+ background: #fff;
+ color: var(--navy);
+ overflow-x: hidden;
+}
+::selection { background: rgba(37,184,213,.22); color: var(--navy); }
+
+/* Reading progress */
+.reading-progress {
+ position: fixed; inset: 0 auto auto 0; width: 0; height: 3px;
+ z-index: 1001; background: linear-gradient(90deg,var(--blue),var(--cyan),var(--teal));
+ box-shadow: 0 0 14px rgba(37,184,213,.45);
+}
+
+/* Cleaner, brighter glass header */
+header {
+ background: rgba(255,255,255,.88);
+ backdrop-filter: blur(18px) saturate(150%);
+ -webkit-backdrop-filter: blur(18px) saturate(150%);
+ border-bottom: 1px solid rgba(16,38,59,.08);
+ box-shadow: 0 8px 30px rgba(16,38,59,.045);
+}
+.logo-name { color: var(--navy); }
+.logo-tag { color: var(--blue); }
+.logo-bar { background: linear-gradient(90deg,var(--blue),var(--cyan)); }
+nav a { color: #53677B; }
+nav a::after { background: linear-gradient(90deg,var(--blue),var(--cyan)); height: 2px; }
+nav a:hover, nav a:focus { color: var(--navy); }
+.btn-nav {
+ border-radius: 6px;
+ background: linear-gradient(110deg,var(--blue),#0867B0);
+ box-shadow: 0 7px 18px rgba(8,119,201,.18);
+}
+.btn-nav:hover { background: linear-gradient(110deg,#1592DF,var(--blue)); box-shadow: 0 10px 24px rgba(8,119,201,.25); }
+.hamburger span { background: var(--navy); }
+.mobile-nav {
+ background: rgba(248,251,255,.98);
+ backdrop-filter: blur(18px);
+}
+.mobile-nav a { color: var(--navy); border-bottom-color: rgba(16,38,59,.10); }
+
+/* Hero: cinematic dark canvas with restrained electric glow */
+#hero {
+ min-height: min(900px, 100svh);
+ background:
+  radial-gradient(ellipse at 78% 42%, rgba(8,119,201,.30), transparent 35%),
+  radial-gradient(ellipse at 92% 82%, rgba(22,166,154,.16), transparent 28%),
+  linear-gradient(118deg,#0A1D30 0%,#102D47 58%,#0B2438 100%);
+}
+.hero-bg { opacity: .13; filter: grayscale(20%) contrast(1.1); transform: scale(1.04); animation: heroImageDrift 24s ease-in-out infinite alternate; }
+.hero-overlay {
+ background:
+  linear-gradient(90deg,rgba(7,24,39,.94) 0%,rgba(7,24,39,.78) 52%,rgba(7,24,39,.35) 100%),
+  linear-gradient(0deg,rgba(7,24,39,.34),transparent 45%);
+}
+.hero-grid {
+ opacity: .72;
+ background-image:
+  linear-gradient(rgba(74,171,226,.075) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(74,171,226,.075) 1px,transparent 1px);
+ background-size: 72px 72px;
+ mask-image: linear-gradient(90deg,transparent,#000 35%,#000);
+}
+.hero-content { max-width: 1280px; gap: clamp(2rem,5vw,6rem); }
+.hero-left { animation: heroEnter .9s cubic-bezier(.2,.75,.25,1) both; }
+.hero-eyebrow span { color: #69D5E8; }
+.hero-eyebrow::before { background: linear-gradient(90deg,var(--cyan),var(--blue-light)); box-shadow: 0 0 12px rgba(37,184,213,.45); }
+h1 { letter-spacing: -.025em; font-size: clamp(3.2rem,6.3vw,5.4rem); }
+h1 em {
+ background: linear-gradient(100deg,#6ED8EB 0%,#58B2F2 48%,#A1D8FF 100%);
+ -webkit-background-clip: text; background-clip: text; color: transparent;
+ filter: drop-shadow(0 5px 20px rgba(37,184,213,.12));
+}
+.hero-sub { color: #C1D0DD; max-width: 500px; }
+.btn-primary {
+ border-radius: 6px;
+ background: linear-gradient(110deg,var(--blue),#1599D6);
+ box-shadow: 0 9px 25px rgba(8,119,201,.22);
+}
+.btn-primary:hover { background: linear-gradient(110deg,#1599D6,var(--teal)); box-shadow: 0 12px 32px rgba(37,184,213,.25); }
+.btn-secondary { border-radius: 6px; border-color: rgba(207,226,239,.42); }
+.btn-secondary:hover { color: #8CE3EF; border-color: var(--cyan); }
+.hero-right {
+ position: relative; padding: 2rem 0 2rem 2rem;
+ animation: heroEnter 1.1s .12s cubic-bezier(.2,.75,.25,1) both;
+}
+.hero-right::before {
+ content: ""; position: absolute; width: min(34vw,390px); aspect-ratio: 1;
+ right: 1%; top: 50%; transform: translateY(-50%);
+ border: 1px solid rgba(88,190,232,.20); border-radius: 50%;
+ box-shadow: 0 0 0 24px rgba(88,190,232,.025),0 0 0 52px rgba(88,190,232,.018),inset 0 0 65px rgba(8,119,201,.10);
+ animation: orbitPulse 7s ease-in-out infinite;
+ pointer-events: none;
+}
+.hero-stat {
+ position: relative; z-index: 1; max-width: 460px; margin-left: auto;
+ background: linear-gradient(115deg,rgba(255,255,255,.105),rgba(255,255,255,.045));
+ border: 1px solid rgba(188,226,244,.19);
+ border-left: 2px solid var(--cyan);
+ border-radius: 10px; padding: 1.35rem 1.55rem;
+ box-shadow: 0 14px 36px rgba(0,0,0,.12);
+ backdrop-filter: blur(10px);
+ transition: transform .35s, border-color .35s, background .35s;
+}
+.hero-stat:nth-child(2) { margin-right: 2.5rem; border-left-color: var(--teal); }
+.hero-stat:nth-child(3) { margin-right: .5rem; border-left-color: var(--amber); }
+.hero-stat:hover { transform: translateX(-8px); background: rgba(255,255,255,.13); border-color: rgba(110,216,235,.42); }
+.hero-stat-label { color: #9FB7C9; }
+.hero-stat-value { color: #fff; }
+.hero-scroll span { color: #AFC4D4; }
+.scroll-line { background: linear-gradient(to bottom,var(--cyan),transparent); }
+
+/* A slim transition strip gives the hero a deliberate ending */
+.signal-strip {
+ position: relative; z-index: 3; overflow: hidden;
+ background: #fff; border-bottom: 1px solid #E8EFF5;
+}
+.signal-strip-inner {
+ max-width: 1200px; margin: auto; padding: 1.25rem 2rem;
+ display: flex; justify-content: space-between; align-items: center;
+ gap: 1.25rem; flex-wrap: wrap;
+}
+.signal-item { display:flex; align-items:center; gap:.65rem; color:#526A7F; font-size:.75rem; font-weight:600; letter-spacing:.07em; text-transform:uppercase; }
+.signal-dot { width:7px; height:7px; border-radius:50%; background:var(--teal); box-shadow:0 0 0 4px rgba(22,166,154,.10); }
+
+/* Sections: more breathing room and alternating whites */
+.section { padding: clamp(4.5rem,8vw,7.5rem) 2rem; }
+#sobre { background: #fff; }
+#servicos { background: linear-gradient(180deg,#F4F8FC 0%,#F8FBFE 100%); }
+#contato { background: linear-gradient(135deg,#fff 0%,#F3F8FC 100%); }
+.section-label span { color: var(--blue); }
+.section-label::before { background: linear-gradient(90deg,var(--blue),var(--cyan)); }
+h2 { letter-spacing:-.025em; }
+.section-line { width: 58px; height: 3px; border-radius: 3px; background: linear-gradient(90deg,var(--blue),var(--cyan),var(--teal)); }
+
+/* About visual gains layered depth without changing its content */
+.about-visual {
+ border-radius: 12px; box-shadow: var(--shadow-soft);
+ isolation: isolate;
+}
+.about-visual::before {
+ border: 1px solid rgba(8,119,201,.5); border-radius: 12px;
+ box-shadow: 12px 12px 0 rgba(37,184,213,.08);
+}
+.about-visual::after {
+ border-radius: 12px;
+ background: linear-gradient(135deg,rgba(8,119,201,.10),transparent 45%,rgba(16,38,59,.25));
+}
+.about-visual:hover { transform: translateY(-5px); transition: transform .6s cubic-bezier(.2,.75,.25,1); }
+.about-badge {
+ border-radius: 10px; background: linear-gradient(135deg,var(--blue),#0A9DC6);
+ box-shadow: 0 14px 35px rgba(8,119,201,.25);
+}
+.pillar-dot { background: var(--teal); box-shadow: 0 0 0 4px rgba(22,166,154,.10); }
+
+/* Service cards: individual color accents, soft glow, layered hover */
+.services-grid {
+ gap: 1rem; background: transparent;
+}
+.service-card {
+ --card-accent: var(--blue);
+ border: 1px solid #E5EDF4; border-radius: 12px;
+ padding: 2.25rem 2rem; min-height: 310px;
+ box-shadow: 0 5px 20px rgba(16,38,59,.035);
+ transition: transform .45s cubic-bezier(.2,.75,.25,1),box-shadow .45s,border-color .35s;
+}
+.service-card:nth-child(2) { --card-accent: var(--cyan); }
+.service-card:nth-child(3) { --card-accent: var(--teal); }
+.service-card:nth-child(4) { --card-accent: var(--amber); }
+.service-card:nth-child(5) { --card-accent: #6478D8; }
+.service-card:nth-child(6) { --card-accent: #1599D6; }
+.service-card::before {
+ height: 3px; background: linear-gradient(90deg,var(--card-accent),rgba(255,255,255,0));
+ transform: scaleX(0); transform-origin:left;
+}
+.service-card::after {
+ content:""; position:absolute; width:190px; height:190px; right:-105px; top:-105px;
+ border-radius:50%; background:var(--card-accent); opacity:0;
+ filter:blur(65px); transition:opacity .45s; pointer-events:none;
+}
+.service-card:hover {
+ transform: translateY(-9px);
+ border-color: color-mix(in srgb,var(--card-accent) 35%,white);
+ box-shadow: 0 22px 48px rgba(16,38,59,.10),0 0 28px color-mix(in srgb,var(--card-accent) 10%,transparent);
+}
+.service-card:hover::before { transform:scaleX(1); }
+.service-card:hover::after { opacity:.12; }
+.service-icon {
+ width:54px; height:54px; border-radius:12px;
+ background: color-mix(in srgb,var(--card-accent) 10%,white);
+ transition: transform .4s,background .4s,box-shadow .4s;
+}
+.service-icon svg { stroke:var(--card-accent); }
+.service-card:hover .service-icon {
+ transform: translateY(-3px) rotate(-4deg);
+ background: color-mix(in srgb,var(--card-accent) 15%,white);
+ box-shadow: 0 8px 20px color-mix(in srgb,var(--card-accent) 14%,transparent);
+}
+.service-num { color:var(--card-accent); }
+.service-card h3 { font-size:1.42rem; }
+.service-desc { color:#64778A; }
+.service-card[style*="border-left"] {
+ background: linear-gradient(145deg,#F0F9FD,#fff) !important;
+ border:1px solid #D8ECF5 !important;
+}
+
+/* Differentials: deep blue rather than one flat black block */
+#diferenciais {
+ position:relative; overflow:hidden;
+ background:
+  radial-gradient(ellipse at 100% 0%,rgba(8,119,201,.23),transparent 35%),
+  radial-gradient(ellipse at 0% 100%,rgba(22,166,154,.12),transparent 30%),
+  linear-gradient(135deg,#10263B,#0A1B2B);
+}
+#diferenciais::before {
+ content:""; position:absolute; inset:0; pointer-events:none; opacity:.18;
+ background-image:linear-gradient(rgba(123,194,226,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(123,194,226,.12) 1px,transparent 1px);
+ background-size:58px 58px; mask-image:linear-gradient(135deg,#000,transparent 75%);
+}
+.diferenciais-inner { position:relative; z-index:1; }
+.diferenciais-header .section-label span { color:#69D5E8; }
+.diferenciais-grid { gap:1rem; background:transparent; }
+.diferencial-item {
+ border:1px solid rgba(188,226,244,.12); border-radius:10px;
+ background:rgba(255,255,255,.045); padding:2.25rem;
+ transition:transform .35s,background .35s,border-color .35s;
+}
+.diferencial-item:hover {
+ transform:translateY(-5px); background:rgba(255,255,255,.085);
+ border-color:rgba(105,213,232,.32);
+}
+.diferencial-num { color:#69D5E8; }
+.diferencial-title { color:#F7FBFF; }
+.diferencial-desc { color:#B4C6D5; }
+
+/* Contact panel and form */
+.contato-info p { color:#536A7E; }
+.contato-item-icon {
+ border-radius:10px; background:linear-gradient(145deg,#E8F5FC,#F4FAFD);
+}
+.contato-item-icon svg { stroke:var(--blue); }
+.contact-form {
+ padding:clamp(1.5rem,3vw,2.5rem); border:1px solid #E2EBF2;
+ border-radius:14px; background:rgba(255,255,255,.88);
+ box-shadow:0 18px 55px rgba(16,38,59,.07);
+}
+.field input,.field select,.field textarea {
+ border:1px solid #DCE6EE; border-radius:7px; background:#FBFDFF;
+ transition:border-color .25s,box-shadow .25s,background .25s;
+}
+.field input:focus,.field select:focus,.field textarea:focus {
+ border-color:var(--cyan); background:#fff;
+ box-shadow:0 0 0 4px rgba(37,184,213,.12);
+}
+.field label { color:#3C5368; }
+.form-status { border-radius:8px; }
+
+/* Footer palette ties back to the hero */
+footer {
+ background:linear-gradient(120deg,#0A1B2B,#102B43);
+ border-top:1px solid rgba(37,184,213,.28);
+}
+.footer-col h4 { color:#69D5E8; }
+.footer-bottom { border-top-color:rgba(188,226,244,.13); }
+.footer-cnpj { color:#9CB0C1; }
+
+/* Floating WhatsApp gets a restrained, branded halo */
+.wpp-float {
+ box-shadow:0 7px 22px rgba(37,211,102,.28),0 0 0 7px rgba(37,211,102,.08);
+}
+.wpp-float:hover { box-shadow:0 10px 30px rgba(37,211,102,.36),0 0 0 10px rgba(37,211,102,.09); }
+
+/* Motion system: reversible scroll reveals */
+.reveal {
+ opacity: 0;
+ transform: translate3d(0, 30px, 0);
+ transition: opacity .72s cubic-bezier(.2,.7,.2,1),
+       transform .72s cubic-bezier(.2,.7,.2,1);
+ will-change: opacity, transform;
+}
+.reveal.is-visible {
+ opacity: 1;
+ transform: translate3d(0, 0, 0);
+}
+.reveal-delay-1 { transition-delay: .10s; }
+.reveal-delay-2 { transition-delay: .20s; }
+.reveal-delay-3 { transition-delay: .30s; }
+@keyframes heroEnter {
+ from { opacity:0; transform:translateY(24px); }
+ to { opacity:1; transform:translateY(0); }
+}
+@keyframes heroImageDrift { from { transform:scale(1.04) translate3d(0,0,0); } to { transform:scale(1.11) translate3d(-1%,1%,0); } }
+@keyframes orbitPulse { 0%,100% { opacity:.65; transform:translateY(-50%) scale(.98); } 50% { opacity:1; transform:translateY(-50%) scale(1.03); } }
+@keyframes signalShimmer { 0% { transform:translateX(-120%); } 100% { transform:translateX(220%); } }
+@media (max-width:1024px) {
+ .hero-right { display:flex; padding:0; }
+ .hero-right::before { width:300px; right:4%; }
+ .hero-stat { margin-left:0; max-width:560px; }
+ .hero-stat:nth-child(2),.hero-stat:nth-child(3) { margin-right:0; }
+}
+@media (max-width:768px) {
+ .header-inner { padding:0 1.25rem; height:66px; }
+ .mobile-nav { inset:66px 0 0; }
+ #hero { min-height: auto; }
+ .hero-content { padding:8.5rem 1.25rem 7rem; gap:2.5rem; }
+ h1 { font-size:clamp(2.8rem,12vw,4rem); }
+ .hero-right { gap:.8rem; }
+ .hero-right::before { width:230px; right:-2%; }
+ .hero-stat { padding:1rem 1.15rem; }
+ .signal-strip-inner { justify-content:flex-start; gap:1rem 1.5rem; padding:1.1rem 1.25rem; }
+ .signal-item { font-size:.66rem; }
+ .services-grid { gap:.85rem; }
+ .service-card { min-height:0; padding:1.8rem 1.5rem; }
+ .diferenciais-grid { gap:.8rem; }
+ .diferencial-item { padding:1.7rem; }
+ .contact-form { padding:1.25rem; }
+ .wpp-float { right:1.2rem; bottom:1.2rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+ html { scroll-behavior:auto; }
+ .reveal { opacity:1; transform:none; transition:none; }
+ .hero-bg,.hero-right::before { animation:none; }
+}
+
+</style>
 </head>
 <body>
-  <main id="loginView" class="login-shell">
-    <section class="login-card" aria-labelledby="loginTitle">
-      <a class="brand-lockup" href="/" aria-label="Connecta Instalações, página inicial">
-        <span class="brand-mark">C</span>
-        <span><strong>CONNECTA</strong><small>INSTALAÇÕES</small></span>
-      </a>
-      <div class="login-eyebrow">PORTAL ADMINISTRATIVO</div>
-      <h1 id="loginTitle">Acesso à gestão de pedidos</h1>
-      <p class="login-copy">Entre com suas credenciais de administrador para acompanhar as solicitações.</p>
-      <form id="loginForm" class="login-form">
-        <label for="loginEmail">E-mail</label>
-        <input id="loginEmail" type="email" autocomplete="username" required placeholder="admin@empresa.com">
-        <label for="loginPassword">Senha</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Sua senha">
-        <button type="submit" class="button button-primary" id="loginButton">Entrar no painel</button>
-      </form>
-      <button class="text-button" id="forgotPasswordButton" type="button">Esqueci minha senha</button>
-      <div id="loginMessage" class="inline-message" role="status" aria-live="polite"></div>
-      <p class="login-footnote">Acesso restrito a usuários cadastrados pela administração da Connecta.</p>
-      <a href="/" class="back-site">← Voltar ao site institucional</a>
-    </section>
-    <aside class="login-aside">
-      <div class="aside-orbit orbit-one"></div><div class="aside-orbit orbit-two"></div>
-      <div class="aside-content">
-        <span class="aside-kicker">CONNECTA · OPERAÇÃO</span>
-        <h2>Da solicitação à entrega, tudo conectado.</h2>
-        <p>Centralize os pedidos, acompanhe cada etapa e mantenha o histórico operacional em um único lugar.</p>
-        <div class="aside-lines"><span>GESTÃO DE PEDIDOS</span><span>HISTÓRICO E RASTREABILIDADE</span><span>ATUALIZAÇÃO EM TEMPO REAL</span></div>
-      </div>
-    </aside>
-  </main>
+<div class="reading-progress" id="readingProgress" aria-hidden="true"></div>
+<a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
 
-  <div id="appShell" class="app-shell" hidden>
-    <aside class="sidebar" id="sidebar">
-      <a class="side-brand" href="/" aria-label="Connecta Instalações">
-        <span class="brand-mark">C</span><span><strong>CONNECTA</strong><small>INSTALAÇÕES</small></span>
-      </a>
-      <div class="side-caption">ESPAÇO DE TRABALHO</div>
-      <nav class="side-nav" aria-label="Menu administrativo">
-        <button class="side-link active" data-view-target="dashboard"><span class="nav-icon">▦</span>Visão geral</button>
-        <button class="side-link" data-view-target="orders"><span class="nav-icon">☷</span>Pedidos <span id="newOrderBadge" class="nav-badge" hidden>0</span></button>
-        <button class="side-link" data-view-target="customers"><span class="nav-icon">◎</span>Clientes</button>
-        <button class="side-link" data-view-target="services"><span class="nav-icon">⬡</span>Serviços</button>
-        <div class="side-separator"></div>
-        <button class="side-link" data-view-target="settings"><span class="nav-icon">⚙</span>Configurações</button>
-      </nav>
-      <div class="sidebar-bottom">
-        <div class="sidebar-status"><span class="live-dot"></span><span>Sincronização ativa</span></div>
-        <div class="user-card"><div class="avatar" id="userAvatar">C</div><div class="user-meta"><strong id="userName">Administrador</strong><small>Equipe Connecta</small></div><button class="icon-button" id="logoutButton" title="Sair" aria-label="Sair">↗</button></div>
-        <a class="back-public" href="/">← Site público</a>
-      </div>
-    </aside>
+<!-- HEADER -->
+<header role="banner">
+ <div class="header-inner">
+  <a href="#hero" class="logo" aria-label="Connecta Instalações, página inicial">
+   <span class="logo-name">CONNECTA</span>
+   <span class="logo-tag">Instalações</span>
+   <div class="logo-bar"></div>
+  </a>
+  <nav role="navigation" aria-label="Navegação principal">
+   <a href="#sobre">Empresa</a>
+   <a href="#servicos">Serviços</a>
+   <a href="#diferenciais">Diferenciais</a>
+   <a href="#contato" class="btn-nav">Falar com a equipe</a>
+  </nav>
+  <button class="hamburger" aria-label="Abrir menu" aria-expanded="false" id="hamburger">
+   <span></span><span></span><span></span>
+  </button>
+ </div>
+</header>
 
-    <div class="main-area">
-      <header class="topbar">
-        <div class="topbar-left"><button id="menuToggle" class="mobile-menu" type="button" aria-label="Abrir menu">☰</button><div><div class="breadcrumb">CONNECTA <span>/</span> <strong id="breadcrumbCurrent">VISÃO GERAL</strong></div><h1 id="pageTitle">Visão geral</h1></div></div>
-        <div class="topbar-right"><div class="connection-chip"><span class="live-dot"></span><span>Conectado</span></div><span id="todayLabel" class="today-label"></span></div>
-      </header>
+<div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Menu mobile" aria-hidden="true">
+ <a href="#sobre" class="mobile-link">Empresa</a>
+ <a href="#servicos" class="mobile-link">Serviços</a>
+ <a href="#diferenciais" class="mobile-link">Diferenciais</a>
+ <a href="#contato" class="mobile-link">Contato</a>
+</div>
 
-      <div id="globalMessage" class="global-message" role="status" aria-live="polite"></div>
+<main id="main-content">
 
-      <section class="view active" id="dashboardView" data-view="dashboard">
-        <div class="section-heading"><div><p class="eyebrow">ACOMPANHAMENTO OPERACIONAL</p><h2>Resumo dos pedidos</h2><p class="section-subtitle">Indicadores atualizados automaticamente conforme novas solicitações chegam.</p></div><button class="button button-quiet" id="refreshDashboard">↻ Atualizar</button></div>
-        <div class="metrics-grid">
-          <article class="metric-card metric-total"><div class="metric-top"><span>Total de pedidos</span><span class="metric-symbol">▤</span></div><strong id="metricTotal">—</strong><small>Todos os registros</small></article>
-          <article class="metric-card metric-new"><div class="metric-top"><span>Novos</span><span class="metric-symbol">✦</span></div><strong id="metricNovo">—</strong><small>Aguardando triagem</small></article>
-          <article class="metric-card metric-progress"><div class="metric-top"><span>Em andamento</span><span class="metric-symbol">◷</span></div><strong id="metricProgress">—</strong><small>Análise, orçamento e execução</small></article>
-          <article class="metric-card metric-done"><div class="metric-top"><span>Concluídos</span><span class="metric-symbol">✓</span></div><strong id="metricConcluido">—</strong><small>Entregas finalizadas</small></article>
-        </div>
-        <div class="dashboard-grid">
-          <article class="panel status-panel"><div class="panel-heading"><div><h3>Pedidos por status</h3><p>Distribuição do fluxo de atendimento</p></div><span class="panel-kicker">STATUS</span></div><div id="statusChart" class="status-chart"></div></article>
-          <article class="panel activity-panel"><div class="panel-heading"><div><h3>Atividades recentes</h3><p>Últimas movimentações registradas</p></div><span class="panel-kicker">HISTÓRICO</span></div><div id="recentActivities" class="activity-list"><div class="empty-state">Carregando atividades...</div></div></article>
-        </div>
-        <article class="panel dashboard-orders"><div class="panel-heading"><div><h3>Pedidos recentes</h3><p>As últimas solicitações recebidas</p></div><button class="text-button" data-view-target="orders">Ver todos →</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Pedido</th><th>Cliente</th><th>Serviços</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody id="recentOrdersBody"><tr><td colspan="6" class="table-empty">Carregando...</td></tr></tbody></table></div></article>
-      </section>
-
-      <section class="view" id="ordersView" data-view="orders">
-        <div class="section-heading"><div><p class="eyebrow">CENTRAL DE ATENDIMENTO</p><h2>Gerenciamento de pedidos</h2><p class="section-subtitle">Pesquise, filtre e acompanhe cada solicitação da Connecta.</p></div><button class="button button-quiet" id="refreshOrders">↻ Atualizar</button></div>
-        <div class="filters-panel">
-          <div class="search-box"><span>⌕</span><input id="orderSearch" type="search" placeholder="Buscar por pedido, cliente ou telefone..." aria-label="Pesquisar pedidos"></div>
-          <select id="statusFilter" aria-label="Filtrar por status"><option value="">Todos os status</option></select>
-          <label class="date-filter"><span>De</span><input id="dateFrom" type="date" aria-label="Data inicial"></label>
-          <label class="date-filter"><span>Até</span><input id="dateTo" type="date" aria-label="Data final"></label>
-          <select id="orderSort" aria-label="Ordenar pedidos"><option value="created_at.desc">Mais recentes</option><option value="created_at.asc">Mais antigos</option><option value="order_number.desc">Número decrescente</option></select>
-        </div>
-        <article class="panel orders-panel"><div class="table-summary"><span id="ordersCount">Carregando pedidos...</span><span class="live-caption"><span class="live-dot"></span> Atualização automática</span></div>
-          <div class="table-wrap"><table class="data-table orders-table"><thead><tr><th>Número</th><th>Cliente</th><th>Empresa</th><th>Serviço(s)</th><th>Data</th><th>Status</th><th>Telefone</th><th>Ações</th></tr></thead><tbody id="ordersBody"><tr><td colspan="8" class="table-empty">Carregando...</td></tr></tbody></table></div>
-          <div class="pagination"><span id="pageInfo">Página 1</span><div><button id="prevPage" class="button button-quiet" type="button">← Anterior</button><button id="nextPage" class="button button-quiet" type="button">Próxima →</button></div></div>
-        </article>
-      </section>
-
-      <!-- CLIENTES -->
-      <section class="view" id="customersView" data-view="customers">
-        <div class="section-heading"><div><p class="eyebrow">BASE DE CLIENTES</p><h2>Clientes cadastrados</h2><p class="section-subtitle">Histórico de quem já realizou solicitações pela plataforma.</p></div><button class="button button-quiet" id="refreshCustomers">↻ Atualizar</button></div>
-        <div class="filters-panel">
-          <div class="search-box"><span>⌕</span><input id="customerSearch" type="search" placeholder="Buscar por nome, e-mail ou telefone..." aria-label="Pesquisar clientes"></div>
-        </div>
-        <article class="panel orders-panel">
-          <div class="table-summary"><span id="customersCount">Carregando clientes...</span></div>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Nome</th><th>Empresa</th><th>E-mail</th><th>Telefone</th><th>Pedidos</th><th>Cadastro</th><th>Ações</th></tr></thead><tbody id="customersBody"><tr><td colspan="7" class="table-empty">Carregando...</td></tr></tbody></table></div>
-          <div class="pagination"><span id="customersPageInfo">Página 1</span><div><button id="customersPrevPage" class="button button-quiet" type="button">← Anterior</button><button id="customersNextPage" class="button button-quiet" type="button">Próxima →</button></div></div>
-        </article>
-      </section>
-
-      <!-- SERVIÇOS -->
-      <section class="view" id="servicesView" data-view="services">
-        <div class="section-heading"><div><p class="eyebrow">CATÁLOGO DE SERVIÇOS</p><h2>Serviços e soluções</h2><p class="section-subtitle">Gerencie os serviços exibidos no formulário público.</p></div><button class="button button-primary" id="newServiceButton">+ Novo serviço</button></div>
-        <article class="panel" id="servicesPanel">
-          <div class="table-summary"><span id="servicesCount">Carregando serviços...</span></div>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Ordem</th><th>Nome</th><th>Descrição</th><th>Status</th><th>Ações</th></tr></thead><tbody id="servicesBody"><tr><td colspan="5" class="table-empty">Carregando...</td></tr></tbody></table></div>
-        </article>
-      </section>
-
-      <!-- CONFIGURAÇÕES -->
-      <section class="view" id="settingsView" data-view="settings">
-        <div class="section-heading"><div><p class="eyebrow">CONFIGURAÇÕES DO SISTEMA</p><h2>Dados da empresa</h2><p class="section-subtitle">Informações persistidas no banco de dados e usadas pela plataforma.</p></div></div>
-        <div class="settings-grid">
-          <article class="panel settings-panel">
-            <div class="panel-heading"><div><h3>Empresa e contato</h3><p>Dados gerais exibidos no site e usados nas notificações</p></div><span class="panel-kicker">IDENTIDADE</span></div>
-            <div class="settings-form" id="settingsForm">
-              <div class="settings-row"><label>Nome da empresa</label><input id="cfgCompanyName" type="text" maxlength="120" placeholder="Connecta Instalações"></div>
-              <div class="settings-row"><label>CNPJ</label><input id="cfgCnpj" type="text" maxlength="18" placeholder="00.000.000/0000-00"></div>
-              <div class="settings-row"><label>E-mail de contato</label><input id="cfgEmail" type="email" maxlength="120" placeholder="contato@empresa.com.br"></div>
-              <div class="settings-row"><label>WhatsApp comercial</label><input id="cfgWhatsapp" type="tel" maxlength="20" placeholder="556100000000"></div>
-              <div class="settings-row"><label>Telefone alternativo</label><input id="cfgPhone" type="tel" maxlength="20" placeholder="6100000000"></div>
-              <div class="settings-row"><label>Endereço</label><input id="cfgAddress" type="text" maxlength="200" placeholder="Cidade, Estado"></div>
-            </div>
-            <div class="settings-actions"><button class="button button-primary" id="saveCompanySettings">Salvar dados da empresa</button></div>
-          </article>
-          <article class="panel settings-panel">
-            <div class="panel-heading"><div><h3>Redes sociais</h3><p>Links exibidos no site institucional</p></div><span class="panel-kicker">SOCIAL</span></div>
-            <div class="settings-form">
-              <div class="settings-row"><label>Instagram</label><input id="cfgInstagram" type="url" maxlength="200" placeholder="https://instagram.com/connecta"></div>
-              <div class="settings-row"><label>LinkedIn</label><input id="cfgLinkedin" type="url" maxlength="200" placeholder="https://linkedin.com/company/connecta"></div>
-              <div class="settings-row"><label>Facebook</label><input id="cfgFacebook" type="url" maxlength="200" placeholder="https://facebook.com/connecta"></div>
-            </div>
-            <div class="settings-actions"><button class="button button-primary" id="saveSocialSettings">Salvar redes sociais</button></div>
-          </article>
-          <article class="panel settings-panel">
-            <div class="panel-heading"><div><h3>Horário de funcionamento</h3><p>Exibido no site e considerado no atendimento</p></div><span class="panel-kicker">OPERAÇÃO</span></div>
-            <div class="settings-form">
-              <div class="settings-row"><label>Segunda a sexta</label><input id="cfgWeekdays" type="text" maxlength="80" placeholder="08:00 – 18:00"></div>
-              <div class="settings-row"><label>Sábado</label><input id="cfgSaturday" type="text" maxlength="80" placeholder="08:00 – 12:00"></div>
-              <div class="settings-row"><label>Domingo e feriados</label><input id="cfgSunday" type="text" maxlength="80" placeholder="Fechado"></div>
-              <div class="settings-row"><label>Observação de atendimento</label><input id="cfgHoursNote" type="text" maxlength="200" placeholder="Plantão de emergência disponível"></div>
-            </div>
-            <div class="settings-actions"><button class="button button-primary" id="saveHoursSettings">Salvar horários</button></div>
-          </article>
-          <article class="panel settings-panel settings-info-panel">
-            <div class="panel-heading"><div><h3>Informações do sistema</h3><p>Versão atual da plataforma</p></div><span class="panel-kicker">SISTEMA</span></div>
-            <div class="settings-form">
-              <div class="info-row"><span>Versão</span><strong>1.0.0</strong></div>
-              <div class="info-row"><span>Banco de dados</span><strong>Supabase PostgreSQL</strong></div>
-              <div class="info-row"><span>URL do projeto</span><strong id="infoSupabaseUrl">—</strong></div>
-              <div class="info-row"><span>Realtime</span><strong>Ativo</strong></div>
-              <div class="info-row"><span>Autenticação</span><strong>Supabase Auth + RLS</strong></div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <footer class="admin-footer"><span>© <span id="yearLabel"></span> Connecta Instalações</span><span>Portal administrativo · Acesso protegido</span></footer>
-    </div>
+<!-- HERO -->
+<section id="hero" aria-label="Apresentação">
+ <div class="hero-bg" role="img" aria-hidden="true"></div>
+ <div class="hero-grid" aria-hidden="true"></div>
+ <div class="hero-overlay" aria-hidden="true"></div>
+ <div class="hero-content">
+  <div class="hero-left">
+   <div class="hero-eyebrow"><span>Infraestrutura &amp; Tecnologia</span></div>
+   <h1>Conectando tecnologia, energia e <em>soluções inteligentes.</em></h1>
+   <p class="hero-sub">Soluções em instalações elétricas, infraestrutura tecnológica, sistemas de segurança e automação industrial para empresas que não param.</p>
+   <div class="hero-actions">
+    <a href="#servicos" class="btn-primary">
+     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+     Conheça nossas soluções
+    </a>
+    <a href="#contato" class="btn-secondary">Entre em contato</a>
+   </div>
   </div>
+  <div class="hero-right" aria-hidden="true">
+   <div class="hero-stat">
+    <span class="hero-stat-label">Especialidade</span>
+    <span class="hero-stat-value">Instalações Elétricas &amp; Industriais</span>
+   </div>
+   <div class="hero-stat">
+    <span class="hero-stat-label">Atendimento</span>
+    <span class="hero-stat-value">Empresas, indústrias e empreendimentos comerciais</span>
+   </div>
+   <div class="hero-stat">
+    <span class="hero-stat-label">Soluções</span>
+    <span class="hero-stat-value">Elétrica, Dados, Segurança e Automação</span>
+   </div>
+  </div>
+ </div>
+ <div class="hero-scroll" aria-hidden="true">
+  <span>Rolar</span>
+  <div class="scroll-line"></div>
+ </div>
+</section>
 
-  <dialog id="orderDetailDialog" class="detail-dialog">
-    <div class="detail-head"><div><span class="eyebrow">DETALHES DA SOLICITAÇÃO</span><h2 id="detailOrderNumber">Pedido</h2><p id="detailCreatedAt"></p></div><button class="icon-button dialog-x" id="closeDetail" type="button" aria-label="Fechar detalhes">×</button></div>
-    <div id="detailLoading" class="empty-state">Carregando dados do pedido...</div>
-    <div id="detailContent" hidden>
-      <div class="detail-grid">
-        <section class="detail-section"><h3>Dados do cliente</h3><dl id="customerDetails" class="detail-list"></dl></section>
-        <section class="detail-section"><h3>Solicitação</h3><dl id="requestDetails" class="detail-list"></dl></section>
-      </div>
-      <section class="detail-section"><h3>Serviços solicitados</h3><div id="detailServices" class="tag-list"></div></section>
-      <section class="detail-section"><h3>Arquivos anexados</h3><div id="detailAttachments" class="attachment-list"></div></section>
-      <section class="detail-section status-edit-section"><div><h3>Atualizar andamento</h3><p>Alterações são registradas no histórico do pedido.</p></div><div class="status-editor"><select id="detailStatus" aria-label="Novo status"></select><input id="statusReason" maxlength="1000" placeholder="Observação sobre a alteração (opcional)"><button id="saveStatusButton" class="button button-primary" type="button">Salvar status</button></div></section>
-      <section class="detail-section"><h3>Observações internas</h3><form id="noteForm" class="note-form"><textarea id="noteText" rows="3" maxlength="5000" placeholder="Adicione uma observação visível somente à equipe..."></textarea><button class="button button-primary" type="submit">Adicionar observação</button></form><div id="internalNotes" class="notes-list"></div></section>
-      <section class="detail-section"><h3>Histórico do pedido</h3><div id="orderTimeline" class="timeline"></div></section>
-      <section class="detail-section notification-section"><div><h3>Notificação WhatsApp</h3><p id="notificationInfo">Status da notificação comercial.</p></div><div id="notificationMeta" class="notification-meta"></div><div class="notification-actions"><button id="retryNotificationButton" class="button button-quiet" type="button">↻ Tentar envio pela API</button><a id="manualWhatsAppButton" class="button button-whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir WhatsApp comercial</a><a id="customerWhatsAppButton" class="button button-quiet" href="#" target="_blank" rel="noopener noreferrer">Conversar com cliente ↗</a></div><div id="notificationAttempts" class="attempt-list"></div></section>
+<!-- FAIXA DE ESPECIALIDADES -->
+<div class="signal-strip" aria-label="Áreas de especialidade">
+ <div class="signal-strip-inner">
+  <span class="signal-item"><i class="signal-dot"></i> Engenharia e precisão</span>
+  <span class="signal-item"><i class="signal-dot" style="background:var(--blue);box-shadow:0 0 0 4px rgba(8,119,201,.10)"></i> Infraestrutura integrada</span>
+  <span class="signal-item"><i class="signal-dot" style="background:var(--amber);box-shadow:0 0 0 4px rgba(230,162,60,.12)"></i> Segurança operacional</span>
+  <span class="signal-item"><i class="signal-dot" style="background:var(--cyan);box-shadow:0 0 0 4px rgba(37,184,213,.10)"></i> Tecnologia aplicada</span>
+ </div>
+</div>
+
+<!-- SOBRE -->
+<section id="sobre" class="section" aria-labelledby="sobre-titulo">
+ <div class="section-inner">
+  <div class="about-grid">
+   <div class="about-visual" role="img" aria-label="Infraestrutura elétrica e tecnológica">
+    <div class="about-badge">
+     <strong>+6</strong>
+     <span>Áreas de atuação</span>
     </div>
-  </dialog>
-
-  <!-- Dialog: Detalhes do cliente -->
-  <dialog id="customerDetailDialog" class="detail-dialog">
-    <div class="detail-head"><div><span class="eyebrow">PERFIL DO CLIENTE</span><h2 id="customerDetailName">Cliente</h2><p id="customerDetailSince"></p></div><button class="icon-button dialog-x" id="closeCustomerDetail" type="button" aria-label="Fechar">×</button></div>
-    <div id="customerDetailContent" style="padding:0 1.5rem 1.5rem">
-      <div class="detail-grid" style="margin-top:1rem">
-        <section class="detail-section"><h3>Dados de contato</h3><dl id="customerContactDl" class="detail-list"></dl></section>
-        <section class="detail-section"><h3>Editar cadastro</h3>
-          <div class="settings-form" style="margin-top:.5rem">
-            <div class="settings-row"><label>Nome</label><input id="editCustomerName" type="text" maxlength="120"></div>
-            <div class="settings-row"><label>Empresa</label><input id="editCustomerCompany" type="text" maxlength="120"></div>
-            <div class="settings-row"><label>Telefone</label><input id="editCustomerPhone" type="tel" maxlength="20"></div>
-            <div class="settings-row"><label>E-mail</label><input id="editCustomerEmail" type="email" maxlength="120"></div>
-          </div>
-          <div class="settings-actions" style="margin-top:.8rem"><button class="button button-primary" id="saveCustomerButton">Salvar alterações</button></div>
-        </section>
-      </div>
-      <section class="detail-section"><h3>Histórico de pedidos</h3><div id="customerOrdersHistory" class="table-wrap"><table class="data-table"><thead><tr><th>Pedido</th><th>Serviços</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody id="customerOrdersBody"></tbody></table></div></section>
+   </div>
+   <div class="about-text">
+    <div class="section-label"><span>Empresa</span></div>
+    <h2 id="sobre-titulo">Engenharia e tecnologia trabalhando em conjunto.</h2>
+    <div class="section-line"></div>
+    <p>A Connecta Instalações é uma empresa especializada em infraestrutura elétrica, tecnologia e soluções industriais. Atuamos com foco em qualidade técnica, organização e comprometimento com cada projeto que assumimos.</p>
+    <p>Nossa equipe é preparada para atender empresas de médio e grande porte, indústrias e empreendimentos comerciais que exigem rigor técnico, pontualidade e confiabilidade em cada entrega.</p>
+    <p>De instalações elétricas a sistemas de automação, integramos diferentes disciplinas para oferecer soluções completas, eficientes e alinhadas às necessidades reais do seu negócio.</p>
+    <div class="about-pillars">
+     <div class="pillar"><div class="pillar-dot"></div><span class="pillar-text">Comprometimento com cada projeto</span></div>
+     <div class="pillar"><div class="pillar-dot"></div><span class="pillar-text">Atendimento técnico especializado</span></div>
+     <div class="pillar"><div class="pillar-dot"></div><span class="pillar-text">Organização e precisão na execução</span></div>
     </div>
-  </dialog>
+   </div>
+  </div>
+ </div>
+</section>
 
-  <!-- Dialog: Criar/editar serviço -->
-  <dialog id="serviceDialog" class="detail-dialog" style="max-width:520px">
-    <div class="detail-head"><div><span class="eyebrow">CATÁLOGO DE SERVIÇOS</span><h2 id="serviceDialogTitle">Novo serviço</h2></div><button class="icon-button dialog-x" id="closeServiceDialog" type="button" aria-label="Fechar">×</button></div>
-    <div style="padding:1rem 1.5rem 1.5rem">
-      <input type="hidden" id="editServiceId">
-      <div class="settings-form">
-        <div class="settings-row"><label>Nome do serviço *</label><input id="editServiceName" type="text" maxlength="120" placeholder="Ex: Instalações Elétricas Industriais"></div>
-        <div class="settings-row"><label>Slug (identificador único) *</label><input id="editServiceSlug" type="text" maxlength="80" placeholder="instalacoes-eletricas-industriais"></div>
-        <div class="settings-row"><label>Descrição</label><textarea id="editServiceDesc" rows="3" maxlength="500" placeholder="Descreva o serviço brevemente..." style="border:1px solid #dfe7ed;border-radius:6px;padding:.6rem;font:inherit;width:100%;resize:vertical;font-size:.72rem"></textarea></div>
-        <div class="settings-row"><label>Ordem de exibição</label><input id="editServiceOrder" type="number" min="1" max="999" value="10"></div>
-        <div class="settings-row" style="display:flex;align-items:center;gap:.7rem"><label style="margin-bottom:0">Ativo (visível no formulário público)</label><input id="editServiceActive" type="checkbox" checked style="width:18px;height:18px;accent-color:var(--blue)"></div>
-      </div>
-      <div class="settings-actions" style="margin-top:1rem;display:flex;gap:.5rem">
-        <button class="button button-primary" id="saveServiceButton">Salvar serviço</button>
-        <button class="button button-quiet" id="deleteServiceButton" style="color:#b64a58;border-color:#f0c8cc" hidden>Excluir serviço</button>
-      </div>
+<!-- SERVIÇOS -->
+<section id="servicos" class="section" aria-labelledby="servicos-titulo">
+ <div class="section-inner">
+  <div class="services-header">
+   <div class="section-label"><span>Serviços</span></div>
+   <h2 id="servicos-titulo">Soluções integradas para sua infraestrutura.</h2>
+   <div class="section-line"></div>
+   <p>Da instalação elétrica à automação de processos, oferecemos um portfólio completo de serviços para atender as demandas técnicas do seu projeto.</p>
+  </div>
+  <div class="services-grid" role="list">
+
+   <article class="service-card" role="listitem">
+    <div class="service-icon" aria-hidden="true">
+     <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
     </div>
-  </dialog>
+    <span class="service-num">01</span>
+    <h3>Instalações e Manutenções Elétricas</h3>
+    <p class="service-desc">Soluções em infraestrutura elétrica, instalações industriais e comerciais, além de manutenção preventiva e corretiva de sistemas elétricos.</p>
+   </article>
 
-  <script src="/app-config.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/admin/admin.js"></script>
+   <article class="service-card" role="listitem">
+    <div class="service-icon" aria-hidden="true">
+     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M9 4v16M15 4v16M3 9h18M3 15h18"/></svg>
+    </div>
+    <span class="service-num">02</span>
+    <h3>Montagem de Quadros Elétricos</h3>
+    <p class="service-desc">Montagem e configuração de quadros elétricos para distribuição, comando, automação e aplicações industriais e comerciais diversas.</p>
+   </article>
+
+   <article class="service-card" role="listitem">
+    <div class="service-icon" aria-hidden="true">
+     <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="1"/><path d="M6 10h.01M6 14h.01M12 6v12M18 10h.01M18 14h.01"/></svg>
+    </div>
+    <span class="service-num">03</span>
+    <h3>Redes de Dados e Racks</h3>
+    <p class="service-desc">Infraestrutura de conectividade estruturada, montagem e certificação de redes de dados, e organização técnica de racks e cabeamentos.</p>
+   </article>
+
+   <article class="service-card" role="listitem">
+    <div class="service-icon" aria-hidden="true">
+     <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+    </div>
+    <span class="service-num">04</span>
+    <h3>Detecção de Incêndio</h3>
+    <p class="service-desc">Infraestrutura e instalação de sistemas de detecção e alarme de incêndio para ambientes industriais, comerciais e empreendimentos de grande porte.</p>
+   </article>
+
+   <article class="service-card" role="listitem">
+    <div class="service-icon" aria-hidden="true">
+     <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+    </div>
+    <span class="service-num">05</span>
+    <h3>Automação Industrial</h3>
+    <p class="service-desc">Soluções voltadas à automação de processos industriais, integração de sistemas de controle e implementação de tecnologias para eficiência operacional.</p>
+   </article>
+
+   <article class="service-card" role="listitem" style="background:rgba(8,119,201,.04); border-left:3px solid var(--blue);">
+    <div class="service-icon" aria-hidden="true" style="background:rgba(8,119,201,.12);">
+     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span class="service-num">06</span>
+    <h3>Precisa de outra solução?</h3>
+    <p class="service-desc">Fale com nossa equipe. Analisamos o seu projeto e indicamos a melhor abordagem técnica para sua necessidade específica.</p>
+    <a href="#contato" class="btn-secondary" style="margin-top:.5rem; font-size:.8rem; padding:.6rem 1.2rem;">Falar com a equipe</a>
+   </article>
+
+  </div>
+ </div>
+</section>
+
+<!-- DIFERENCIAIS -->
+<section id="diferenciais" aria-labelledby="diferenciais-titulo">
+ <div class="diferenciais-inner">
+  <div class="diferenciais-header">
+   <div class="section-label"><span>Por que a Connecta</span></div>
+   <h2 class="on-dark" id="diferenciais-titulo">O que orienta cada projeto que assumimos.</h2>
+  </div>
+  <div class="diferenciais-grid" role="list">
+   <div class="diferencial-item" role="listitem">
+    <div class="diferencial-num">I</div>
+    <div class="diferencial-title">Soluções Integradas</div>
+    <p class="diferencial-desc">Cobrimos múltiplas disciplinas, elétrica, dados, segurança e automação, sob um mesmo guarda-chuva técnico, simplificando a gestão e a execução dos seus projetos.</p>
+   </div>
+   <div class="diferencial-item" role="listitem">
+    <div class="diferencial-num">II</div>
+    <div class="diferencial-title">Atendimento Técnico</div>
+    <p class="diferencial-desc">Cada projeto é atendido por equipe técnica capacitada, com foco em precisão, clareza nas entregas e comunicação direta com o responsável pelo projeto.</p>
+   </div>
+   <div class="diferencial-item" role="listitem">
+    <div class="diferencial-num">III</div>
+    <div class="diferencial-title">Organização e Infraestrutura</div>
+    <p class="diferencial-desc">Prezamos pela organização em cada detalhe: cabeamentos bem identificados, quadros bem montados, racks organizados. Infraestrutura feita do jeito certo.</p>
+   </div>
+   <div class="diferencial-item" role="listitem">
+    <div class="diferencial-num">IV</div>
+    <div class="diferencial-title">Tecnologia Aplicada</div>
+    <p class="diferencial-desc">Acompanhamos as evoluções do setor e aplicamos as tecnologias mais adequadas a cada necessidade, garantindo soluções modernas e preparadas para o futuro.</p>
+   </div>
+   <div class="diferencial-item" role="listitem">
+    <div class="diferencial-num">V</div>
+    <div class="diferencial-title">Compromisso com a Qualidade</div>
+    <p class="diferencial-desc">Qualidade não é requisito opcional, é o ponto de partida. Cada serviço que realizamos é executado com atenção aos detalhes e rigor técnico.</p>
+   </div>
+   <div class="diferencial-item" role="listitem">
+    <div class="diferencial-num">VI</div>
+    <div class="diferencial-title">Foco no Resultado do Cliente</div>
+    <p class="diferencial-desc">Nosso trabalho só está completo quando o cliente tem exatamente o que precisa funcionando. Nos comprometemos com o resultado, não apenas com a execução.</p>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato" class="section" aria-labelledby="contato-titulo">
+ <div class="section-inner">
+  <div class="contato-grid">
+   <div class="contato-info">
+    <div class="section-label"><span>Contato</span></div>
+    <h2 id="contato-titulo">Vamos conversar sobre seu próximo projeto?</h2>
+    <div class="section-line"></div>
+    <p>Descreva sua necessidade e nossa equipe retornará com as melhores opções técnicas para o seu projeto. Atendemos empresas, indústrias e empreendimentos comerciais.</p>
+    <div class="contato-items">
+     <div class="contato-item">
+      <div class="contato-item-icon" aria-hidden="true">
+       <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.67A2 2 0 012 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+      </div>
+      <div>
+       <div class="contato-item-label">WhatsApp</div>
+       <div class="contato-item-value">A definir</div>
+      </div>
+     </div>
+     <div class="contato-item">
+      <div class="contato-item-icon" aria-hidden="true">
+       <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div>
+       <div class="contato-item-label">E-mail</div>
+       <div class="contato-item-value">A definir</div>
+      </div>
+     </div>
+     <div class="contato-item">
+      <div class="contato-item-icon" aria-hidden="true">
+       <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div>
+       <div class="contato-item-label">Localização</div>
+       <div class="contato-item-value">A definir</div>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <form class="contact-form" id="contactForm" novalidate aria-label="Formulário de contato">
+    <div class="form-row">
+     <div class="field">
+      <label for="nome">Nome completo <span aria-hidden="true">*</span></label>
+      <input type="text" id="nome" name="nome" placeholder="Seu nome" required autocomplete="name">
+      <span class="field-error" role="alert" id="nome-error"></span>
+     </div>
+     <div class="field">
+      <label for="empresa">Empresa</label>
+      <input type="text" id="empresa" name="empresa" placeholder="Nome da empresa" autocomplete="organization">
+     </div>
+    </div>
+    <div class="form-row">
+     <div class="field">
+      <label for="email">E-mail <span aria-hidden="true">*</span></label>
+      <input type="email" id="email" name="email" placeholder="seu@email.com" required autocomplete="email">
+      <span class="field-error" role="alert" id="email-error"></span>
+     </div>
+     <div class="field">
+      <label for="telefone">Telefone</label>
+      <input type="tel" id="telefone" name="telefone" placeholder="(00) 00000-0000" autocomplete="tel">
+     </div>
+    </div>
+    <div class="field">
+     <label for="assunto">Serviço de interesse</label>
+     <select id="assunto" name="assunto">
+      <option value="">Selecione um serviço...</option>
+      <option>Instalações e Manutenções Elétricas</option>
+      <option>Montagem de Quadros Elétricos</option>
+      <option>Redes de Dados e Racks</option>
+      <option>Detecção de Incêndio</option>
+      <option>Automação Industrial</option>
+      <option>Outro</option>
+     </select>
+    </div>
+    <div class="field">
+     <label for="endereco">Local da execução <span aria-hidden="true">*</span></label>
+     <input type="text" id="endereco" name="endereco" placeholder="Endereço ou cidade da obra" required>
+    </div>
+    <div class="field">
+     <label for="preferenciaContato">Como prefere receber o retorno?</label>
+     <select id="preferenciaContato" name="preferenciaContato" required>
+      <option value="whatsapp">WhatsApp</option><option value="telefone">Ligação telefônica</option><option value="email">E-mail</option>
+     </select>
+    </div>
+    <div class="field">
+     <label><input type="checkbox" id="consentimento" required> Autorizo o uso dos meus dados para atendimento desta solicitação.</label>
+    </div>
+    <div style="position:absolute;left:-10000px" aria-hidden="true"><label for="website">Não preencher</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+    <div class="field">
+     <label for="mensagem">Descreva sua necessidade <span aria-hidden="true">*</span></label>
+     <textarea id="mensagem" name="mensagem" placeholder="Descreva brevemente o seu projeto ou necessidade técnica..." required rows="5"></textarea>
+     <span class="field-error" role="alert" id="mensagem-error"></span>
+    </div>
+    <div id="formStatus" class="form-status" role="status" aria-live="polite"></div>
+    <div class="form-submit">
+     <span class="form-note">* Campos obrigatórios</span>
+     <button type="submit" class="btn-primary" id="submitBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      Enviar mensagem
+     </button>
+    </div>
+   </form>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+ <div class="footer-main">
+  <div class="footer-brand">
+   <a href="#hero" class="logo" aria-label="Connecta Instalações">
+    <span class="logo-name" style="font-size:1.1rem;">CONNECTA</span>
+    <span class="logo-tag">Instalações</span>
+    <div class="logo-bar"></div>
+   </a>
+   <p>Soluções em instalações elétricas, infraestrutura tecnológica, sistemas de segurança e automação industrial.</p>
+   <span class="footer-cnpj">CNPJ: 23.175.414/0001-57</span>
+  </div>
+  <div class="footer-col">
+   <h4>Navegação</h4>
+   <ul>
+    <li><a href="#hero">Início</a></li>
+    <li><a href="#sobre">Empresa</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#contato">Contato</a></li>
+   </ul>
+  </div>
+  <div class="footer-col">
+   <h4>Serviços</h4>
+   <ul>
+    <li><a href="#servicos">Instalações Elétricas</a></li>
+    <li><a href="#servicos">Quadros Elétricos</a></li>
+    <li><a href="#servicos">Redes de Dados</a></li>
+    <li><a href="#servicos">Detecção de Incêndio</a></li>
+    <li><a href="#servicos">Automação Industrial</a></li>
+   </ul>
+  </div>
+ </div>
+ <div class="footer-bottom">
+  <span>© 2024 Connecta Instalações. Todos os direitos reservados.</span>
+  <span>CNPJ 23.175.414/0001-57</span>
+ </div>
+</footer>
+
+<!-- WhatsApp float (configure o número) -->
+<a href="https://wa.me/5500000000000" class="wpp-float" aria-label="Falar pelo WhatsApp" target="_blank" rel="noopener noreferrer">
+ <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+
+// VISUAL MOTION: reversible reveal + reading progress
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revealTargets = document.querySelectorAll(
+ '.signal-strip, .about-visual, .about-text, .services-header, .service-card, ' +
+ '.diferenciais-header, .diferencial-item, .contato-info, .contact-form, ' +
+ '.footer-brand, .footer-col, .footer-bottom'
+);
+
+if (!reduceMotion && 'IntersectionObserver' in window) {
+ revealTargets.forEach((el, index) => {
+  el.classList.add('reveal');
+  if (el.classList.contains('service-card') || el.classList.contains('diferencial-item') ||
+    el.classList.contains('footer-col')) {
+   el.classList.add('reveal-delay-' + ((index % 3) + 1));
+  }
+ });
+
+ // Keep observing for the entire page lifetime. No unobserve() call means
+ // entering and leaving the viewport repeatedly toggles the animation state.
+ const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+   entry.target.classList.toggle('is-visible', entry.isIntersecting);
+  });
+ }, {
+  threshold: 0.12,
+  rootMargin: '0px 0px -45px 0px'
+ });
+
+ revealTargets.forEach(el => revealObserver.observe(el));
+} else {
+ revealTargets.forEach(el => el.classList.add('is-visible'));
+}
+
+const readingProgress = document.getElementById('readingProgress');
+let progressTicking = false;
+function updateReadingProgress() {
+ const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+ const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+ readingProgress.style.width = progress + '%';
+ progressTicking = false;
+}
+window.addEventListener('scroll', () => {
+ if (!progressTicking) {
+  window.requestAnimationFrame(updateReadingProgress);
+  progressTicking = true;
+ }
+}, { passive: true });
+updateReadingProgress();
+
+// ── HAMBURGER ──
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+ const open = hamburger.classList.toggle('open');
+ hamburger.setAttribute('aria-expanded', open);
+ mobileNav.classList.toggle('open', open);
+ mobileNav.setAttribute('aria-hidden', !open);
+ document.body.style.overflow = open ? 'hidden' : '';
+});
+document.querySelectorAll('.mobile-link').forEach(link => {
+ link.addEventListener('click', () => {
+  hamburger.classList.remove('open');
+  hamburger.setAttribute('aria-expanded', false);
+  mobileNav.classList.remove('open');
+  mobileNav.setAttribute('aria-hidden', true);
+  document.body.style.overflow = '';
+ });
+});
+document.addEventListener('keydown', e => {
+ if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+  hamburger.click();
+  hamburger.focus();
+ }
+});
+
+// ── ACTIVE NAV ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('nav a[href^="#"]');
+const observer = new IntersectionObserver(entries => {
+ entries.forEach(entry => {
+  if (entry.isIntersecting) {
+   navLinks.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + entry.target.id ? 'var(--white)' : '';
+   });
+  }
+ });
+}, { threshold: .3 });
+sections.forEach(s => observer.observe(s));
+
+// ── FORM VALIDATION & SUBMISSION ──
+const form = document.getElementById('contactForm');
+const statusEl = document.getElementById('formStatus');
+const submitBtn = document.getElementById('submitBtn');
+
+function showError(fieldId, msg) {
+ const el = document.getElementById(fieldId + '-error');
+ const input = document.getElementById(fieldId);
+ if (el) el.textContent = msg;
+ if (input) { input.classList.add('error'); input.setAttribute('aria-describedby', fieldId + '-error'); }
+}
+function clearErrors() {
+ ['nome','email','mensagem'].forEach(f => {
+  const el = document.getElementById(f + '-error');
+  const input = document.getElementById(f);
+  if (el) el.textContent = '';
+  if (input) { input.classList.remove('error'); input.removeAttribute('aria-describedby'); }
+ });
+ statusEl.className = 'form-status';
+ statusEl.textContent = '';
+}
+function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+form.addEventListener('submit', async (e) => {
+ e.preventDefault();
+ clearErrors();
+
+ const nome = document.getElementById('nome').value.trim();
+ const email = document.getElementById('email').value.trim();
+ const mensagem = document.getElementById('mensagem').value.trim();
+ let valid = true;
+
+ if (!nome) { showError('nome', 'Por favor, informe seu nome.'); valid = false; }
+ if (!email) { showError('email', 'Por favor, informe seu e-mail.'); valid = false; }
+ else if (!validateEmail(email)) { showError('email', 'Informe um e-mail válido.'); valid = false; }
+ if (!mensagem) { showError('mensagem', 'Por favor, descreva sua necessidade.'); valid = false; }
+
+ if (!valid) return;
+
+ // Coleta dados
+ const data = {
+  nome,
+  empresa: document.getElementById('empresa').value.trim(),
+  email,
+  telefone: document.getElementById('telefone').value.trim(),
+  assunto: document.getElementById('assunto').value,
+  mensagem,
+ };
+
+ // Status: carregando
+ statusEl.className = 'form-status loading';
+ statusEl.textContent = 'Enviando mensagem...';
+ submitBtn.disabled = true;
+ submitBtn.style.opacity = '.6';
+
+ try {
+  // ── CONFIGURAR ENDPOINT ──
+  // Substitua pela URL do seu backend ou serviço (ex: Formspree, Web3Forms, endpoint próprio)
+  const ENDPOINT = 'https://formspree.io/f/CONFIGURE_SEU_ID';
+
+  const res = await fetch(ENDPOINT, {
+   method: 'POST',
+   headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+   body: JSON.stringify(data),
+  });
+
+  if (res.ok) {
+   statusEl.className = 'form-status success';
+   statusEl.textContent = '✓ Mensagem enviada com sucesso! Nossa equipe retornará em breve.';
+   form.reset();
+  } else {
+   const json = await res.json().catch(() => ({}));
+   throw new Error(json.error || 'Erro ao enviar. Tente novamente.');
+  }
+ } catch (err) {
+  if (err.message.includes('CONFIGURE')) {
+   // Endpoint não configurado avisa o desenvolvedor
+   statusEl.className = 'form-status error-msg';
+   statusEl.textContent = '⚠ Configure o endpoint de envio em ENDPOINT para ativar o formulário.';
+  } else {
+   statusEl.className = 'form-status error-msg';
+   statusEl.textContent = '✕ Não foi possível enviar. Verifique sua conexão e tente novamente.';
+  }
+ } finally {
+  submitBtn.disabled = false;
+  submitBtn.style.opacity = '';
+  statusEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+ }
+});
+
+// Live validation
+['nome','email','mensagem'].forEach(f => {
+ document.getElementById(f)?.addEventListener('input', () => {
+  document.getElementById(f + '-error').textContent = '';
+  document.getElementById(f).classList.remove('error');
+ });
+});
+
+// Máscara de telefone
+const telInput = document.getElementById('telefone');
+telInput?.addEventListener('input', () => {
+ let v = telInput.value.replace(/\D/g,'');
+ if (v.length > 11) v = v.slice(0,11);
+ if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+ else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+ else if (v.length) v = `(${v}`;
+ telInput.value = v;
+});
+</script>
+<script src="/app-config.js"></script>
+<script src="/public-orders.js"></script>
 </body>
 </html>
