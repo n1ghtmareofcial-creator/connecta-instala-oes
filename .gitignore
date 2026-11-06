@@ -1,0 +1,9 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+supabase/.branches/
+supabase/.temp/
+supabase/functions/.env
+node_modules/
+*.log

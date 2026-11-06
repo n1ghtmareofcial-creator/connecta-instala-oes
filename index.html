@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071827">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Administração | Connecta Instalações</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <main id="loginView" class="login-shell">
+    <section class="login-card" aria-labelledby="loginTitle">
+      <a class="brand-lockup" href="/" aria-label="Connecta Instalações, página inicial">
+        <span class="brand-mark">C</span>
+        <span><strong>CONNECTA</strong><small>INSTALAÇÕES</small></span>
+      </a>
+      <div class="login-eyebrow">PORTAL ADMINISTRATIVO</div>
+      <h1 id="loginTitle">Acesso à gestão de pedidos</h1>
+      <p class="login-copy">Entre com suas credenciais de administrador para acompanhar as solicitações.</p>
+      <form id="loginForm" class="login-form">
+        <label for="loginEmail">E-mail</label>
+        <input id="loginEmail" type="email" autocomplete="username" required placeholder="admin@empresa.com">
+        <label for="loginPassword">Senha</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Sua senha">
+        <button type="submit" class="button button-primary" id="loginButton">Entrar no painel</button>
+      </form>
+      <button class="text-button" id="forgotPasswordButton" type="button">Esqueci minha senha</button>
+      <div id="loginMessage" class="inline-message" role="status" aria-live="polite"></div>
+      <p class="login-footnote">Acesso restrito a usuários cadastrados pela administração da Connecta.</p>
+      <a href="/" class="back-site">← Voltar ao site institucional</a>
+    </section>
+    <aside class="login-aside">
+      <div class="aside-orbit orbit-one"></div><div class="aside-orbit orbit-two"></div>
+      <div class="aside-content">
+        <span class="aside-kicker">CONNECTA · OPERAÇÃO</span>
+        <h2>Da solicitação à entrega, tudo conectado.</h2>
+        <p>Centralize os pedidos, acompanhe cada etapa e mantenha o histórico operacional em um único lugar.</p>
+        <div class="aside-lines"><span>GESTÃO DE PEDIDOS</span><span>HISTÓRICO E RASTREABILIDADE</span><span>ATUALIZAÇÃO EM TEMPO REAL</span></div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="appShell" class="app-shell" hidden>
+    <aside class="sidebar" id="sidebar">
+      <a class="side-brand" href="/" aria-label="Connecta Instalações">
+        <span class="brand-mark">C</span><span><strong>CONNECTA</strong><small>INSTALAÇÕES</small></span>
+      </a>
+      <div class="side-caption">ESPAÇO DE TRABALHO</div>
+      <nav class="side-nav" aria-label="Menu administrativo">
+        <button class="side-link active" data-view-target="dashboard"><span class="nav-icon">▦</span>Visão geral</button>
+        <button class="side-link" data-view-target="orders"><span class="nav-icon">☷</span>Pedidos <span id="newOrderBadge" class="nav-badge" hidden>0</span></button>
+        <button class="side-link" data-view-target="customers"><span class="nav-icon">◎</span>Clientes</button>
+        <button class="side-link" data-view-target="services"><span class="nav-icon">⬡</span>Serviços</button>
+        <div class="side-separator"></div>
+        <button class="side-link" data-view-target="settings"><span class="nav-icon">⚙</span>Configurações</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-status"><span class="live-dot"></span><span>Sincronização ativa</span></div>
+        <div class="user-card"><div class="avatar" id="userAvatar">C</div><div class="user-meta"><strong id="userName">Administrador</strong><small>Equipe Connecta</small></div><button class="icon-button" id="logoutButton" title="Sair" aria-label="Sair">↗</button></div>
+        <a class="back-public" href="/">← Site público</a>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <header class="topbar">
+        <div class="topbar-left"><button id="menuToggle" class="mobile-menu" type="button" aria-label="Abrir menu">☰</button><div><div class="breadcrumb">CONNECTA <span>/</span> <strong id="breadcrumbCurrent">VISÃO GERAL</strong></div><h1 id="pageTitle">Visão geral</h1></div></div>
+        <div class="topbar-right"><div class="connection-chip"><span class="live-dot"></span><span>Conectado</span></div><span id="todayLabel" class="today-label"></span></div>
+      </header>
+
+      <div id="globalMessage" class="global-message" role="status" aria-live="polite"></div>
+
+      <section class="view active" id="dashboardView" data-view="dashboard">
+        <div class="section-heading"><div><p class="eyebrow">ACOMPANHAMENTO OPERACIONAL</p><h2>Resumo dos pedidos</h2><p class="section-subtitle">Indicadores atualizados automaticamente conforme novas solicitações chegam.</p></div><button class="button button-quiet" id="refreshDashboard">↻ Atualizar</button></div>
+        <div class="metrics-grid">
+          <article class="metric-card metric-total"><div class="metric-top"><span>Total de pedidos</span><span class="metric-symbol">▤</span></div><strong id="metricTotal">—</strong><small>Todos os registros</small></article>
+          <article class="metric-card metric-new"><div class="metric-top"><span>Novos</span><span class="metric-symbol">✦</span></div><strong id="metricNovo">—</strong><small>Aguardando triagem</small></article>
+          <article class="metric-card metric-progress"><div class="metric-top"><span>Em andamento</span><span class="metric-symbol">◷</span></div><strong id="metricProgress">—</strong><small>Análise, orçamento e execução</small></article>
+          <article class="metric-card metric-done"><div class="metric-top"><span>Concluídos</span><span class="metric-symbol">✓</span></div><strong id="metricConcluido">—</strong><small>Entregas finalizadas</small></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel status-panel"><div class="panel-heading"><div><h3>Pedidos por status</h3><p>Distribuição do fluxo de atendimento</p></div><span class="panel-kicker">STATUS</span></div><div id="statusChart" class="status-chart"></div></article>
+          <article class="panel activity-panel"><div class="panel-heading"><div><h3>Atividades recentes</h3><p>Últimas movimentações registradas</p></div><span class="panel-kicker">HISTÓRICO</span></div><div id="recentActivities" class="activity-list"><div class="empty-state">Carregando atividades...</div></div></article>
+        </div>
+        <article class="panel dashboard-orders"><div class="panel-heading"><div><h3>Pedidos recentes</h3><p>As últimas solicitações recebidas</p></div><button class="text-button" data-view-target="orders">Ver todos →</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Pedido</th><th>Cliente</th><th>Serviços</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody id="recentOrdersBody"><tr><td colspan="6" class="table-empty">Carregando...</td></tr></tbody></table></div></article>
+      </section>
+
+      <section class="view" id="ordersView" data-view="orders">
+        <div class="section-heading"><div><p class="eyebrow">CENTRAL DE ATENDIMENTO</p><h2>Gerenciamento de pedidos</h2><p class="section-subtitle">Pesquise, filtre e acompanhe cada solicitação da Connecta.</p></div><button class="button button-quiet" id="refreshOrders">↻ Atualizar</button></div>
+        <div class="filters-panel">
+          <div class="search-box"><span>⌕</span><input id="orderSearch" type="search" placeholder="Buscar por pedido, cliente ou telefone..." aria-label="Pesquisar pedidos"></div>
+          <select id="statusFilter" aria-label="Filtrar por status"><option value="">Todos os status</option></select>
+          <label class="date-filter"><span>De</span><input id="dateFrom" type="date" aria-label="Data inicial"></label>
+          <label class="date-filter"><span>Até</span><input id="dateTo" type="date" aria-label="Data final"></label>
+          <select id="orderSort" aria-label="Ordenar pedidos"><option value="created_at.desc">Mais recentes</option><option value="created_at.asc">Mais antigos</option><option value="order_number.desc">Número decrescente</option></select>
+        </div>
+        <article class="panel orders-panel"><div class="table-summary"><span id="ordersCount">Carregando pedidos...</span><span class="live-caption"><span class="live-dot"></span> Atualização automática</span></div>
+          <div class="table-wrap"><table class="data-table orders-table"><thead><tr><th>Número</th><th>Cliente</th><th>Empresa</th><th>Serviço(s)</th><th>Data</th><th>Status</th><th>Telefone</th><th>Ações</th></tr></thead><tbody id="ordersBody"><tr><td colspan="8" class="table-empty">Carregando...</td></tr></tbody></table></div>
+          <div class="pagination"><span id="pageInfo">Página 1</span><div><button id="prevPage" class="button button-quiet" type="button">← Anterior</button><button id="nextPage" class="button button-quiet" type="button">Próxima →</button></div></div>
+        </article>
+      </section>
+
+      <!-- CLIENTES -->
+      <section class="view" id="customersView" data-view="customers">
+        <div class="section-heading"><div><p class="eyebrow">BASE DE CLIENTES</p><h2>Clientes cadastrados</h2><p class="section-subtitle">Histórico de quem já realizou solicitações pela plataforma.</p></div><button class="button button-quiet" id="refreshCustomers">↻ Atualizar</button></div>
+        <div class="filters-panel">
+          <div class="search-box"><span>⌕</span><input id="customerSearch" type="search" placeholder="Buscar por nome, e-mail ou telefone..." aria-label="Pesquisar clientes"></div>
+        </div>
+        <article class="panel orders-panel">
+          <div class="table-summary"><span id="customersCount">Carregando clientes...</span></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Nome</th><th>Empresa</th><th>E-mail</th><th>Telefone</th><th>Pedidos</th><th>Cadastro</th><th>Ações</th></tr></thead><tbody id="customersBody"><tr><td colspan="7" class="table-empty">Carregando...</td></tr></tbody></table></div>
+          <div class="pagination"><span id="customersPageInfo">Página 1</span><div><button id="customersPrevPage" class="button button-quiet" type="button">← Anterior</button><button id="customersNextPage" class="button button-quiet" type="button">Próxima →</button></div></div>
+        </article>
+      </section>
+
+      <!-- SERVIÇOS -->
+      <section class="view" id="servicesView" data-view="services">
+        <div class="section-heading"><div><p class="eyebrow">CATÁLOGO DE SERVIÇOS</p><h2>Serviços e soluções</h2><p class="section-subtitle">Gerencie os serviços exibidos no formulário público.</p></div><button class="button button-primary" id="newServiceButton">+ Novo serviço</button></div>
+        <article class="panel" id="servicesPanel">
+          <div class="table-summary"><span id="servicesCount">Carregando serviços...</span></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Ordem</th><th>Nome</th><th>Descrição</th><th>Status</th><th>Ações</th></tr></thead><tbody id="servicesBody"><tr><td colspan="5" class="table-empty">Carregando...</td></tr></tbody></table></div>
+        </article>
+      </section>
+
+      <!-- CONFIGURAÇÕES -->
+      <section class="view" id="settingsView" data-view="settings">
+        <div class="section-heading"><div><p class="eyebrow">CONFIGURAÇÕES DO SISTEMA</p><h2>Dados da empresa</h2><p class="section-subtitle">Informações persistidas no banco de dados e usadas pela plataforma.</p></div></div>
+        <div class="settings-grid">
+          <article class="panel settings-panel">
+            <div class="panel-heading"><div><h3>Empresa e contato</h3><p>Dados gerais exibidos no site e usados nas notificações</p></div><span class="panel-kicker">IDENTIDADE</span></div>
+            <div class="settings-form" id="settingsForm">
+              <div class="settings-row"><label>Nome da empresa</label><input id="cfgCompanyName" type="text" maxlength="120" placeholder="Connecta Instalações"></div>
+              <div class="settings-row"><label>CNPJ</label><input id="cfgCnpj" type="text" maxlength="18" placeholder="00.000.000/0000-00"></div>
+              <div class="settings-row"><label>E-mail de contato</label><input id="cfgEmail" type="email" maxlength="120" placeholder="contato@empresa.com.br"></div>
+              <div class="settings-row"><label>WhatsApp comercial</label><input id="cfgWhatsapp" type="tel" maxlength="20" placeholder="556100000000"></div>
+              <div class="settings-row"><label>Telefone alternativo</label><input id="cfgPhone" type="tel" maxlength="20" placeholder="6100000000"></div>
+              <div class="settings-row"><label>Endereço</label><input id="cfgAddress" type="text" maxlength="200" placeholder="Cidade, Estado"></div>
+            </div>
+            <div class="settings-actions"><button class="button button-primary" id="saveCompanySettings">Salvar dados da empresa</button></div>
+          </article>
+          <article class="panel settings-panel">
+            <div class="panel-heading"><div><h3>Redes sociais</h3><p>Links exibidos no site institucional</p></div><span class="panel-kicker">SOCIAL</span></div>
+            <div class="settings-form">
+              <div class="settings-row"><label>Instagram</label><input id="cfgInstagram" type="url" maxlength="200" placeholder="https://instagram.com/connecta"></div>
+              <div class="settings-row"><label>LinkedIn</label><input id="cfgLinkedin" type="url" maxlength="200" placeholder="https://linkedin.com/company/connecta"></div>
+              <div class="settings-row"><label>Facebook</label><input id="cfgFacebook" type="url" maxlength="200" placeholder="https://facebook.com/connecta"></div>
+            </div>
+            <div class="settings-actions"><button class="button button-primary" id="saveSocialSettings">Salvar redes sociais</button></div>
+          </article>
+          <article class="panel settings-panel">
+            <div class="panel-heading"><div><h3>Horário de funcionamento</h3><p>Exibido no site e considerado no atendimento</p></div><span class="panel-kicker">OPERAÇÃO</span></div>
+            <div class="settings-form">
+              <div class="settings-row"><label>Segunda a sexta</label><input id="cfgWeekdays" type="text" maxlength="80" placeholder="08:00 – 18:00"></div>
+              <div class="settings-row"><label>Sábado</label><input id="cfgSaturday" type="text" maxlength="80" placeholder="08:00 – 12:00"></div>
+              <div class="settings-row"><label>Domingo e feriados</label><input id="cfgSunday" type="text" maxlength="80" placeholder="Fechado"></div>
+              <div class="settings-row"><label>Observação de atendimento</label><input id="cfgHoursNote" type="text" maxlength="200" placeholder="Plantão de emergência disponível"></div>
+            </div>
+            <div class="settings-actions"><button class="button button-primary" id="saveHoursSettings">Salvar horários</button></div>
+          </article>
+          <article class="panel settings-panel settings-info-panel">
+            <div class="panel-heading"><div><h3>Informações do sistema</h3><p>Versão atual da plataforma</p></div><span class="panel-kicker">SISTEMA</span></div>
+            <div class="settings-form">
+              <div class="info-row"><span>Versão</span><strong>1.0.0</strong></div>
+              <div class="info-row"><span>Banco de dados</span><strong>Supabase PostgreSQL</strong></div>
+              <div class="info-row"><span>URL do projeto</span><strong id="infoSupabaseUrl">—</strong></div>
+              <div class="info-row"><span>Realtime</span><strong>Ativo</strong></div>
+              <div class="info-row"><span>Autenticação</span><strong>Supabase Auth + RLS</strong></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="admin-footer"><span>© <span id="yearLabel"></span> Connecta Instalações</span><span>Portal administrativo · Acesso protegido</span></footer>
+    </div>
+  </div>
+
+  <dialog id="orderDetailDialog" class="detail-dialog">
+    <div class="detail-head"><div><span class="eyebrow">DETALHES DA SOLICITAÇÃO</span><h2 id="detailOrderNumber">Pedido</h2><p id="detailCreatedAt"></p></div><button class="icon-button dialog-x" id="closeDetail" type="button" aria-label="Fechar detalhes">×</button></div>
+    <div id="detailLoading" class="empty-state">Carregando dados do pedido...</div>
+    <div id="detailContent" hidden>
+      <div class="detail-grid">
+        <section class="detail-section"><h3>Dados do cliente</h3><dl id="customerDetails" class="detail-list"></dl></section>
+        <section class="detail-section"><h3>Solicitação</h3><dl id="requestDetails" class="detail-list"></dl></section>
+      </div>
+      <section class="detail-section"><h3>Serviços solicitados</h3><div id="detailServices" class="tag-list"></div></section>
+      <section class="detail-section"><h3>Arquivos anexados</h3><div id="detailAttachments" class="attachment-list"></div></section>
+      <section class="detail-section status-edit-section"><div><h3>Atualizar andamento</h3><p>Alterações são registradas no histórico do pedido.</p></div><div class="status-editor"><select id="detailStatus" aria-label="Novo status"></select><input id="statusReason" maxlength="1000" placeholder="Observação sobre a alteração (opcional)"><button id="saveStatusButton" class="button button-primary" type="button">Salvar status</button></div></section>
+      <section class="detail-section"><h3>Observações internas</h3><form id="noteForm" class="note-form"><textarea id="noteText" rows="3" maxlength="5000" placeholder="Adicione uma observação visível somente à equipe..."></textarea><button class="button button-primary" type="submit">Adicionar observação</button></form><div id="internalNotes" class="notes-list"></div></section>
+      <section class="detail-section"><h3>Histórico do pedido</h3><div id="orderTimeline" class="timeline"></div></section>
+      <section class="detail-section notification-section"><div><h3>Notificação WhatsApp</h3><p id="notificationInfo">Status da notificação comercial.</p></div><div id="notificationMeta" class="notification-meta"></div><div class="notification-actions"><button id="retryNotificationButton" class="button button-quiet" type="button">↻ Tentar envio pela API</button><a id="manualWhatsAppButton" class="button button-whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden>Abrir WhatsApp comercial</a><a id="customerWhatsAppButton" class="button button-quiet" href="#" target="_blank" rel="noopener noreferrer">Conversar com cliente ↗</a></div><div id="notificationAttempts" class="attempt-list"></div></section>
+    </div>
+  </dialog>
+
+  <!-- Dialog: Detalhes do cliente -->
+  <dialog id="customerDetailDialog" class="detail-dialog">
+    <div class="detail-head"><div><span class="eyebrow">PERFIL DO CLIENTE</span><h2 id="customerDetailName">Cliente</h2><p id="customerDetailSince"></p></div><button class="icon-button dialog-x" id="closeCustomerDetail" type="button" aria-label="Fechar">×</button></div>
+    <div id="customerDetailContent" style="padding:0 1.5rem 1.5rem">
+      <div class="detail-grid" style="margin-top:1rem">
+        <section class="detail-section"><h3>Dados de contato</h3><dl id="customerContactDl" class="detail-list"></dl></section>
+        <section class="detail-section"><h3>Editar cadastro</h3>
+          <div class="settings-form" style="margin-top:.5rem">
+            <div class="settings-row"><label>Nome</label><input id="editCustomerName" type="text" maxlength="120"></div>
+            <div class="settings-row"><label>Empresa</label><input id="editCustomerCompany" type="text" maxlength="120"></div>
+            <div class="settings-row"><label>Telefone</label><input id="editCustomerPhone" type="tel" maxlength="20"></div>
+            <div class="settings-row"><label>E-mail</label><input id="editCustomerEmail" type="email" maxlength="120"></div>
+          </div>
+          <div class="settings-actions" style="margin-top:.8rem"><button class="button button-primary" id="saveCustomerButton">Salvar alterações</button></div>
+        </section>
+      </div>
+      <section class="detail-section"><h3>Histórico de pedidos</h3><div id="customerOrdersHistory" class="table-wrap"><table class="data-table"><thead><tr><th>Pedido</th><th>Serviços</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody id="customerOrdersBody"></tbody></table></div></section>
+    </div>
+  </dialog>
+
+  <!-- Dialog: Criar/editar serviço -->
+  <dialog id="serviceDialog" class="detail-dialog" style="max-width:520px">
+    <div class="detail-head"><div><span class="eyebrow">CATÁLOGO DE SERVIÇOS</span><h2 id="serviceDialogTitle">Novo serviço</h2></div><button class="icon-button dialog-x" id="closeServiceDialog" type="button" aria-label="Fechar">×</button></div>
+    <div style="padding:1rem 1.5rem 1.5rem">
+      <input type="hidden" id="editServiceId">
+      <div class="settings-form">
+        <div class="settings-row"><label>Nome do serviço *</label><input id="editServiceName" type="text" maxlength="120" placeholder="Ex: Instalações Elétricas Industriais"></div>
+        <div class="settings-row"><label>Slug (identificador único) *</label><input id="editServiceSlug" type="text" maxlength="80" placeholder="instalacoes-eletricas-industriais"></div>
+        <div class="settings-row"><label>Descrição</label><textarea id="editServiceDesc" rows="3" maxlength="500" placeholder="Descreva o serviço brevemente..." style="border:1px solid #dfe7ed;border-radius:6px;padding:.6rem;font:inherit;width:100%;resize:vertical;font-size:.72rem"></textarea></div>
+        <div class="settings-row"><label>Ordem de exibição</label><input id="editServiceOrder" type="number" min="1" max="999" value="10"></div>
+        <div class="settings-row" style="display:flex;align-items:center;gap:.7rem"><label style="margin-bottom:0">Ativo (visível no formulário público)</label><input id="editServiceActive" type="checkbox" checked style="width:18px;height:18px;accent-color:var(--blue)"></div>
+      </div>
+      <div class="settings-actions" style="margin-top:1rem;display:flex;gap:.5rem">
+        <button class="button button-primary" id="saveServiceButton">Salvar serviço</button>
+        <button class="button button-quiet" id="deleteServiceButton" style="color:#b64a58;border-color:#f0c8cc" hidden>Excluir serviço</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="/app-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "connecta-instalacoes-plataforma",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Site institucional integrado a pedidos e painel administrativo da Connecta Instalações",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "serve": "npx http-server . -p 3000 -c-1"
+  }
+}
