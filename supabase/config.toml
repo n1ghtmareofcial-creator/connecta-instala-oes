@@ -1,0 +1,15 @@
+project_id = "connecta-instalacoes"
+
+[api]
+enabled = true
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[functions.create-order]
+# Endpoint público: valida origem, honeypot, limite de requisições e payload no servidor.
+verify_jwt = false
+
+[functions.retry-notification]
+# Exige JWT válido; a função também verifica se o usuário pertence a admin_users.
+verify_jwt = true
