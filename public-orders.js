@@ -2,6 +2,61 @@
   'use strict';
   const form = document.getElementById('contactForm');
   const config = window.CONNECTA_CONFIG || {};
+
+  async function loadManagedServiceImages() {
+    if (!config.supabaseUrl || !config.supabaseAnonKey) return;
+    try {
+      let baseUrl = String(config.supabaseUrl);
+      while (baseUrl.endsWith('/')) baseUrl = baseUrl.slice(0, -1);
+      const apiUrl = baseUrl + '/rest/v1/services?select=name,image_url,is_active&is_active=eq.true&order=sort_order.asc';
+      const response = await fetch(apiUrl, {
+        headers: { apikey: config.supabaseAnonKey, Authorization: 'Bearer ' + config.supabaseAnonKey },
+      });
+      if (!response.ok) return;
+      const services = await response.json();
+      const expectedOrigin = new URL(baseUrl).origin;
+      const normalize = (value) => String(value || '').trim().toLowerCase();
+      const cards = [...document.querySelectorAll('.service-card')];
+
+      cards.forEach((card) => {
+        card.classList.remove('has-managed-image');
+        const oldLayer = card.querySelector('.service-image-visual');
+        if (oldLayer) oldLayer.remove();
+      });
+
+      (services || []).forEach((service) => {
+        if (!service.is_active || !service.image_url) return;
+        const card = cards.find((item) => normalize(item.querySelector('h3')?.textContent) === normalize(service.name));
+        if (!card) return;
+
+        let imageUrl;
+        try {
+          const parsed = new URL(service.image_url);
+          if (parsed.origin !== expectedOrigin || !parsed.pathname.startsWith('/storage/v1/object/public/service-images/')) return;
+          imageUrl = parsed.href;
+        } catch (_) {
+          return;
+        }
+
+        const layer = document.createElement('div');
+        layer.className = 'service-image-visual';
+        layer.setAttribute('aria-hidden', 'true');
+        const image = document.createElement('img');
+        image.className = 'service-image-photo';
+        image.src = imageUrl;
+        image.alt = '';
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        layer.appendChild(image);
+        card.insertBefore(layer, card.firstChild);
+        card.classList.add('has-managed-image');
+      });
+    } catch (error) {
+      console.warn('Não foi possível atualizar as imagens dos serviços.', error);
+    }
+  }
+
+  void loadManagedServiceImages();
   if (!form) return;
   const status = document.getElementById('formStatus');
   const button = document.getElementById('submitBtn');
