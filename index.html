@@ -1425,9 +1425,6 @@ document.querySelectorAll(".solution-tab").forEach(tab=>tab.addEventListener("cl
  const copy=document.querySelector(".solution-panel-copy");copy.style.animation="none";
  requestAnimationFrame(()=>{document.getElementById("solution-kicker").textContent=data.kicker;document.getElementById("solution-title").textContent=data.title;document.getElementById("solution-description").textContent=data.description;document.querySelector(".solution-visual").dataset.mode=tab.dataset.solution;copy.style.animation="";});
 }));
-</script>
-<script src="/app-config.js"></script>
-<script src="/public-orders.js">
 /* Scroll-driven palette system */
 (() => {
  const root=document.documentElement;
@@ -1491,7 +1488,9 @@ document.querySelectorAll(".solution-tab").forEach(tab=>tab.addEventListener("cl
  window.addEventListener('scroll',updateScroll,{passive:true});
  updateScroll();
 })();
-
+</script>
+<script src="/app-config.js"></script>
+<script src="/public-orders.js">
 </script>
 </body>
 </html>
