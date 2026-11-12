@@ -54,6 +54,8 @@
         <button class="side-link" data-view-target="orders"><span class="nav-icon">☷</span>Pedidos <span id="newOrderBadge" class="nav-badge" hidden>0</span></button>
         <button class="side-link" data-view-target="customers"><span class="nav-icon">◎</span>Clientes</button>
         <button class="side-link" data-view-target="services"><span class="nav-icon">⬡</span>Serviços</button>
+        <button class="side-link" data-view-target="reports"><span class="nav-icon">◷</span>Relatórios</button>
+        <button class="side-link" data-view-target="activity"><span class="nav-icon">⌁</span>Atividades</button>
         <div class="side-separator"></div>
         <button class="side-link" data-view-target="settings"><span class="nav-icon">⚙</span>Configurações</button>
       </nav>
@@ -84,11 +86,15 @@
           <article class="panel status-panel"><div class="panel-heading"><div><h3>Pedidos por status</h3><p>Distribuição do fluxo de atendimento</p></div><span class="panel-kicker">STATUS</span></div><div id="statusChart" class="status-chart"></div></article>
           <article class="panel activity-panel"><div class="panel-heading"><div><h3>Atividades recentes</h3><p>Últimas movimentações registradas</p></div><span class="panel-kicker">HISTÓRICO</span></div><div id="recentActivities" class="activity-list"><div class="empty-state">Carregando atividades...</div></div></article>
         </div>
+        <article class="panel dashboard-trend-panel">
+          <div class="panel-heading"><div><h3>Ritmo de solicitações</h3><p>Volume dos últimos seis meses</p></div><button class="text-button" data-view-target="reports">Análise completa →</button></div>
+          <div id="dashboardTrendChart" class="dashboard-trend-chart" role="img" aria-label="Gráfico mensal de solicitações"></div>
+        </article>
         <article class="panel dashboard-orders"><div class="panel-heading"><div><h3>Pedidos recentes</h3><p>As últimas solicitações recebidas</p></div><button class="text-button" data-view-target="orders">Ver todos →</button></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Pedido</th><th>Cliente</th><th>Serviços</th><th>Data</th><th>Status</th><th></th></tr></thead><tbody id="recentOrdersBody"><tr><td colspan="6" class="table-empty">Carregando...</td></tr></tbody></table></div></article>
       </section>
 
       <section class="view" id="ordersView" data-view="orders">
-        <div class="section-heading"><div><p class="eyebrow">CENTRAL DE ATENDIMENTO</p><h2>Gerenciamento de pedidos</h2><p class="section-subtitle">Pesquise, filtre e acompanhe cada solicitação da Connecta.</p></div><button class="button button-quiet" id="refreshOrders">↻ Atualizar</button></div>
+        <div class="section-heading"><div><p class="eyebrow">CENTRAL DE ATENDIMENTO</p><h2>Gerenciamento de pedidos</h2><p class="section-subtitle">Pesquise, filtre e acompanhe cada solicitação da Connecta.</p></div><div class="orders-heading-actions"><button class="button button-quiet" id="exportOrdersButton" type="button">↓ Exportar CSV</button><button class="button button-quiet" id="refreshOrders">↻ Atualizar</button></div></div>
         <div class="filters-panel">
           <div class="search-box"><span>⌕</span><input id="orderSearch" type="search" placeholder="Buscar por pedido, cliente ou telefone..." aria-label="Pesquisar pedidos"></div>
           <select id="statusFilter" aria-label="Filtrar por status"><option value="">Todos os status</option></select>
@@ -122,6 +128,29 @@
           <div class="table-summary"><span id="servicesCount">Carregando serviços...</span></div>
           <div class="table-wrap"><table class="data-table"><thead><tr><th>Ordem</th><th>Nome</th><th>Descrição</th><th>Status</th><th>Ações</th></tr></thead><tbody id="servicesBody"><tr><td colspan="5" class="table-empty">Carregando...</td></tr></tbody></table></div>
         </article>
+      </section>
+
+
+      <section class="view" id="reportsView" data-view="reports">
+        <div class="section-heading"><div><p class="eyebrow">INTELIGÊNCIA OPERACIONAL</p><h2>Relatórios e desempenho</h2><p class="section-subtitle">Indicadores calculados a partir dos pedidos registrados no banco.</p></div><button class="button button-quiet" id="refreshReports">↻ Atualizar</button></div>
+        <div class="report-toolbar"><div><span class="report-live-dot"></span> Dados reais do Supabase</div><label>Período <select id="reportRange"><option value="30">Últimos 30 dias</option><option value="90" selected>Últimos 90 dias</option><option value="365">Últimos 12 meses</option><option value="all">Todo o histórico</option></select></label><small id="reportUpdated">Aguardando atualização</small></div>
+        <div class="metrics-grid report-metrics">
+          <article class="metric-card report-volume"><div class="metric-top"><span>Solicitações no período</span><span class="metric-symbol">▤</span></div><strong id="reportTotal">—</strong><small>Pedidos recebidos</small></article>
+          <article class="metric-card report-completed"><div class="metric-top"><span>Concluídos</span><span class="metric-symbol">✓</span></div><strong id="reportCompleted">—</strong><small>Entregas finalizadas</small></article>
+          <article class="metric-card report-open"><div class="metric-top"><span>Em aberto</span><span class="metric-symbol">◷</span></div><strong id="reportOpen">—</strong><small>Em atendimento ou análise</small></article>
+          <article class="metric-card report-rate"><div class="metric-top"><span>Taxa de conclusão</span><span class="metric-symbol">◎</span></div><strong id="reportRate">—</strong><small>Concluídos sobre o total</small></article>
+        </div>
+        <div class="reports-grid">
+          <article class="panel report-chart-panel"><div class="panel-heading"><div><h3>Evolução mensal</h3><p>Pedidos criados em cada mês nos últimos seis meses</p></div><span class="panel-kicker">TENDÊNCIA</span></div><div id="reportTimeline" class="report-timeline"><div class="empty-state">Carregando dados...</div></div></article>
+          <article class="panel report-chart-panel"><div class="panel-heading"><div><h3>Serviços mais solicitados</h3><p>Itens associados aos pedidos do período</p></div><span class="panel-kicker">DEMANDA</span></div><div id="reportServices" class="report-service-bars"><div class="empty-state">Carregando dados...</div></div></article>
+        </div>
+        <article class="panel report-summary-panel"><div class="panel-heading"><div><h3>Leitura da operação</h3><p>Resumo dos indicadores do período selecionado</p></div><span class="panel-kicker">INSIGHTS</span></div><div id="reportInsights" class="report-insights"><div class="empty-state">Aguardando dados...</div></div></article>
+      </section>
+
+      <section class="view" id="activityView" data-view="activity">
+        <div class="section-heading"><div><p class="eyebrow">RASTREABILIDADE</p><h2>Histórico de atividades</h2><p class="section-subtitle">Movimentações registradas no fluxo dos pedidos, em ordem cronológica.</p></div><button class="button button-quiet" id="refreshActivity">↻ Atualizar</button></div>
+        <div class="activity-overview"><span class="activity-overview-icon">⌁</span><div><strong id="activityCount">—</strong><small>eventos carregados</small></div><span class="activity-overview-note">Registro operacional</span></div>
+        <article class="panel activity-history-panel"><div class="panel-heading"><div><h3>Linha do tempo</h3><p>Até 60 eventos mais recentes disponíveis</p></div><span class="panel-kicker">HISTÓRICO</span></div><div id="activityFeed" class="activity-feed"><div class="empty-state">Carregando histórico...</div></div></article>
       </section>
 
       <!-- CONFIGURAÇÕES -->
@@ -158,6 +187,16 @@
               <div class="settings-row"><label>Observação de atendimento</label><input id="cfgHoursNote" type="text" maxlength="200" placeholder="Plantão de emergência disponível"></div>
             </div>
             <div class="settings-actions"><button class="button button-primary" id="saveHoursSettings">Salvar horários</button></div>
+          </article>
+          <article class="panel settings-panel settings-theme-panel">
+            <div class="panel-heading"><div><h3>Aparência do painel</h3><p>Escolha o clima visual da área administrativa neste navegador.</p></div><span class="panel-kicker">PERSONALIZAÇÃO</span></div>
+            <div class="settings-form">
+              <div class="theme-choice-row"><span class="theme-swatch azure"></span><div><strong>Azul Connecta</strong><small>Visual institucional</small></div></div>
+              <div class="theme-choice-row"><span class="theme-swatch emerald"></span><div><strong>Verde técnico</strong><small>Ênfase operacional</small></div></div>
+              <div class="theme-choice-row"><span class="theme-swatch violet"></span><div><strong>Violeta moderno</strong><small>Contraste elegante</small></div></div>
+              <div class="settings-row"><label for="adminThemeSelect">Tema de cores</label><select id="adminThemeSelect"><option value="azure">Azul Connecta</option><option value="emerald">Verde técnico</option><option value="violet">Violeta moderno</option></select></div>
+              <p class="theme-hint">A preferência é salva somente neste navegador e não altera os dados da empresa.</p>
+            </div>
           </article>
           <article class="panel settings-panel settings-info-panel">
             <div class="panel-heading"><div><h3>Informações do sistema</h3><p>Versão atual da plataforma</p></div><span class="panel-kicker">SISTEMA</span></div>
