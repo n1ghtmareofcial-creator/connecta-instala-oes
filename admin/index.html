@@ -126,7 +126,7 @@
         <div class="section-heading"><div><p class="eyebrow">CATÁLOGO DE SERVIÇOS</p><h2>Serviços e soluções</h2><p class="section-subtitle">Gerencie os serviços exibidos no formulário público.</p></div><button class="button button-primary" id="newServiceButton">+ Novo serviço</button></div>
         <article class="panel" id="servicesPanel">
           <div class="table-summary"><span id="servicesCount">Carregando serviços...</span></div>
-          <div class="table-wrap"><table class="data-table"><thead><tr><th>Ordem</th><th>Nome</th><th>Descrição</th><th>Status</th><th>Ações</th></tr></thead><tbody id="servicesBody"><tr><td colspan="5" class="table-empty">Carregando...</td></tr></tbody></table></div>
+          <div class="table-wrap"><table class="data-table"><thead><tr><th>Ordem</th><th>Nome</th><th>Descrição</th><th>Imagem</th><th>Status</th><th>Ações</th></tr></thead><tbody id="servicesBody"><tr><td colspan="6" class="table-empty">Carregando...</td></tr></tbody></table></div>
         </article>
       </section>
 
@@ -263,6 +263,16 @@
         <div class="settings-row"><label>Descrição</label><textarea id="editServiceDesc" rows="3" maxlength="500" placeholder="Descreva o serviço brevemente..." style="border:1px solid #dfe7ed;border-radius:6px;padding:.6rem;font:inherit;width:100%;resize:vertical;font-size:.72rem"></textarea></div>
         <div class="settings-row"><label>Ordem de exibição</label><input id="editServiceOrder" type="number" min="1" max="999" value="10"></div>
         <div class="settings-row" style="display:flex;align-items:center;gap:.7rem"><label style="margin-bottom:0">Ativo (visível no formulário público)</label><input id="editServiceActive" type="checkbox" checked style="width:18px;height:18px;accent-color:var(--blue)"></div>
+        <div class="service-image-uploader">
+          <div class="service-image-uploader-heading"><div><strong>Imagem do serviço</strong><small>PNG, JPG, WEBP ou AVIF · até 4 MB</small></div><span class="service-image-chip">VISUAL DO SITE</span></div>
+          <div id="serviceImagePreview" class="service-image-preview"><span>Nenhuma imagem selecionada</span></div>
+          <div class="service-image-actions">
+            <label class="button button-quiet service-image-pick" for="serviceImageInput">＋ Escolher imagem</label>
+            <input id="serviceImageInput" class="service-image-input" type="file" accept="image/jpeg,image/png,image/webp,image/avif">
+            <button class="button button-quiet" id="removeServiceImageButton" type="button" hidden>Remover imagem</button>
+          </div>
+          <p id="serviceImageStatus" class="service-image-status">A imagem aparece no card público quando o serviço está ativo.</p>
+        </div>
       </div>
       <div class="settings-actions" style="margin-top:1rem;display:flex;gap:.5rem">
         <button class="button button-primary" id="saveServiceButton">Salvar serviço</button>
