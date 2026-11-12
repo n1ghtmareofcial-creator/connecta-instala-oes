@@ -790,6 +790,18 @@ header{background:rgba(7,24,39,.91);border-bottom-color:color-mix(in srgb,var(--
 .section-divider,.accent-line{background:linear-gradient(90deg,var(--blue),var(--palette-secondary),transparent);transition:background 1s}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.atmosphere-layer{animation:none!important;transition:opacity .2s linear}.scroll-reveal{opacity:1;transform:none;filter:none;transition:none}.service-card,.differential-card,.solution-tab,.process-step,.faq-item,.contact-card{transition:none!important}}
 
+/* SERVICE IMAGE LAYERS */
+.service-card.has-managed-image{isolation:isolate;background:rgba(255,255,255,.9)}
+.service-image-visual{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.service-image-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.48;filter:saturate(1.16) contrast(1.04);transform:scale(1.025);transition:transform 1.2s cubic-bezier(.16,1,.3,1),opacity .8s ease,filter .8s ease}
+.service-image-visual::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.78) 58%,rgba(255,255,255,.9))}
+.service-image-visual::after{content:"";position:absolute;z-index:2;inset:-20% -70%;width:65%;height:140%;background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,0) 35%,rgba(255,255,255,.72) 50%,rgba(255,255,255,0) 64%,transparent 100%);transform:translateX(-170%) skewX(-14deg);animation:serviceImageShine 8s ease-in-out infinite;opacity:.72}
+@keyframes serviceImageShine{0%,30%{transform:translateX(-170%) skewX(-14deg)}68%,100%{transform:translateX(310%) skewX(-14deg)}}
+.service-card.has-managed-image:hover .service-image-photo{transform:scale(1.09);opacity:.58;filter:saturate(1.28) contrast(1.08)}
+.service-card.has-managed-image>*:not(.service-image-visual){position:relative;z-index:1}
+.service-card.has-managed-image .service-icon{background:rgba(255,255,255,.76);box-shadow:0 8px 22px rgba(7,24,39,.07);backdrop-filter:blur(10px)}
+.service-card.has-managed-image .service-num{color:var(--blue)}
+@media(prefers-reduced-motion:reduce){.service-image-photo{transition:none}.service-image-visual::after{animation:none;opacity:.28;transform:translateX(0) skewX(-14deg)}}
 </style>
 </head>
 <body>
