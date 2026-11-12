@@ -688,6 +688,76 @@ footer {
  .hero-bg,.hero-right::before { animation:none; }
 }
 
+
+/* CONNECTA MOTION SYSTEM / 2026 */
+:root{--motion-ease:cubic-bezier(.16,1,.3,1)}
+body{overflow-x:hidden}
+header,main,footer{position:relative}
+header{z-index:100}
+nav a:not(.btn-nav){transition:color .3s var(--motion-ease),transform .3s var(--motion-ease)}
+nav a:not(.btn-nav):hover{transform:translateY(-3px)}
+.btn-nav,.btn-primary{position:relative;overflow:hidden;isolation:isolate}
+.btn-nav:after,.btn-primary:after{content:"";position:absolute;inset:0;z-index:-1;transform:translateX(-130%) skewX(-18deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:transform .8s var(--motion-ease)}
+.btn-nav:hover:after,.btn-primary:hover:after{transform:translateX(130%) skewX(-18deg)}
+#hero:after{content:"";position:absolute;width:min(62vw,760px);aspect-ratio:1;right:-18%;top:2%;border:1px solid rgba(89,196,235,.13);border-radius:50%;box-shadow:0 0 0 36px rgba(89,196,235,.025),0 0 0 82px rgba(89,196,235,.018),0 0 100px rgba(8,119,201,.08);animation:connectaOrbit 18s linear infinite;pointer-events:none}
+@keyframes connectaOrbit{to{transform:rotate(360deg)}}
+@keyframes connectaFloat{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@keyframes connectaPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,184,213,.25)}50%{box-shadow:0 0 0 13px rgba(37,184,213,0)}}
+@keyframes connectaReveal{from{opacity:0;transform:translateY(16px) scale(.985);filter:blur(5px)}to{opacity:1;transform:none;filter:blur(0)}}
+.hero-stat{animation:connectaFloat 7s ease-in-out infinite}
+.hero-stat:nth-child(2){animation-delay:-2.3s}.hero-stat:nth-child(3){animation-delay:-4.6s}
+.showcase-section{position:relative;overflow:hidden;background:linear-gradient(135deg,#F6FAFE,#EEF6FC 55%,#F9FCFF)}
+.showcase-section:before{content:"";position:absolute;width:520px;height:520px;right:-210px;top:8%;border-radius:50%;background:rgba(37,184,213,.1);filter:blur(80px)}
+.showcase-heading{display:flex;align-items:end;justify-content:space-between;gap:3rem;margin-bottom:2.5rem;position:relative}
+.showcase-heading h2{max-width:720px}.showcase-heading>p{max-width:340px;color:#657A8E;line-height:1.8;font-size:.94rem}
+.solution-tabs{display:flex;gap:.65rem;flex-wrap:wrap;margin-bottom:1rem;position:relative}
+.solution-tab{border:1px solid #DCE7F0;background:rgba(255,255,255,.76);color:#5B7185;border-radius:999px;padding:.8rem 1.35rem;font:700 .76rem Manrope,sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .35s var(--motion-ease)}
+.solution-tab:hover{transform:translateY(-3px);border-color:#70BCE3;color:var(--blue)}
+.solution-tab.active{color:white;border-color:transparent;background:linear-gradient(110deg,#0877C9,#19A5C8);box-shadow:0 10px 24px rgba(8,119,201,.22)}
+.solution-panel{min-height:370px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:1px solid rgba(167,194,214,.55);border-radius:22px;background:rgba(255,255,255,.82);box-shadow:0 26px 80px rgba(16,38,59,.09);backdrop-filter:blur(12px);position:relative}
+.solution-panel-copy{padding:clamp(2rem,5vw,4.5rem);align-self:center;animation:connectaReveal .65s var(--motion-ease) both}
+.solution-kicker{color:#0B8CC8;font-size:.7rem;font-weight:800;letter-spacing:.24em}
+.solution-panel-copy h3{font-size:clamp(1.7rem,3vw,2.65rem);line-height:1.13;margin:1rem 0;max-width:460px}
+.solution-panel-copy p{color:#63788B;line-height:1.85;max-width:470px}
+.solution-link{display:inline-flex;align-items:center;gap:1.1rem;margin-top:2rem;text-decoration:none;color:#0877C9;font-weight:800;font-size:.82rem;letter-spacing:.04em}
+.solution-link span{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#E8F5FC;transition:transform .3s}
+.solution-link:hover span{transform:translate(4px,-4px)}
+.solution-visual{min-height:370px;position:relative;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 50% 50%,rgba(38,174,215,.2),transparent 42%),linear-gradient(140deg,#0C2941,#0B1C2C)}
+.solution-visual[data-mode=conectividade]{background:radial-gradient(circle at 50% 50%,rgba(52,187,224,.24),transparent 42%),linear-gradient(140deg,#102E45,#081A2B)}
+.solution-visual[data-mode=seguranca]{background:radial-gradient(circle at 50% 50%,rgba(230,162,60,.2),transparent 42%),linear-gradient(140deg,#302A25,#101E2A)}
+.solution-visual[data-mode=automacao]{background:radial-gradient(circle at 50% 50%,rgba(22,166,154,.22),transparent 42%),linear-gradient(140deg,#0A353B,#0B1C2C)}
+.solution-visual:before{content:"";position:absolute;inset:0;opacity:.32;background-image:linear-gradient(rgba(113,196,227,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(113,196,227,.12) 1px,transparent 1px);background-size:32px 32px;mask-image:radial-gradient(ellipse,#000,transparent 75%)}
+.visual-orbit{position:absolute;width:250px;aspect-ratio:1;border:1px solid rgba(100,211,238,.35);border-radius:50%;animation:connectaOrbit 20s linear infinite}
+.orbit-two{width:330px;border-style:dashed;animation-direction:reverse;animation-duration:30s}
+.visual-core{width:138px;height:138px;border-radius:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;color:white;background:linear-gradient(145deg,rgba(32,156,206,.85),rgba(12,57,87,.9));border:1px solid rgba(145,229,249,.55);box-shadow:0 0 60px rgba(37,184,213,.32),inset 0 0 28px rgba(255,255,255,.12);transform:rotate(-8deg);animation:connectaCore 6s ease-in-out infinite}
+.visual-core span{font-size:.56rem;letter-spacing:.2em;font-weight:800}.visual-core strong{font:800 2.7rem Sora,sans-serif}
+@keyframes connectaCore{0%,100%{transform:rotate(-8deg) translateY(0)}50%{transform:rotate(8deg) translateY(-14px)}}
+.visual-line{position:absolute;width:130%;height:1px;background:linear-gradient(90deg,transparent,rgba(75,209,235,.7),transparent);transform:rotate(28deg);animation:connectaLine 5s ease-in-out infinite}
+.line-two{transform:rotate(-28deg);animation-delay:-2.5s}
+@keyframes connectaLine{0%,100%{opacity:.12;translate:-8% 0}50%{opacity:.9;translate:8% 0}}
+.process-section{background:#0A2033;color:white;overflow:hidden}
+.process-section h2{color:white;max-width:740px}.process-lead{color:#AFC2D1;margin-top:1rem;max-width:560px;line-height:1.8}
+.process-track{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:4rem;position:relative}
+.process-track:before{content:"";position:absolute;left:5%;right:5%;top:25px;height:1px;background:linear-gradient(90deg,transparent,#168FC8,#36C2CE,#168FC8,transparent);background-size:200% 100%;animation:connectaShimmer 6s linear infinite}
+@keyframes connectaShimmer{to{background-position:200% 0}}
+.process-step{position:relative;z-index:1;padding:0 .5rem}.process-index{font:700 .72rem Sora,sans-serif;letter-spacing:.2em;color:#60CDE2}
+.process-node{width:50px;height:50px;border-radius:50%;margin:1rem 0 1.5rem;display:grid;place-items:center;border:1px solid rgba(92,208,232,.55);background:#102F48;box-shadow:0 0 0 8px rgba(66,175,215,.05)}
+.process-node span{width:10px;height:10px;border-radius:50%;background:#61D7E7;animation:connectaPulse 2.6s infinite}
+.process-step h3{color:white;font-size:1.08rem;margin-bottom:.7rem}.process-step p{color:#9DB2C3;line-height:1.75;font-size:.84rem;max-width:230px}
+.faq-section{background:linear-gradient(135deg,#F8FBFE,#EDF5FA)}
+.faq-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(2rem,7vw,7rem);align-items:start}
+.faq-heading h2{margin-bottom:1rem}.faq-heading p{color:#687E91;line-height:1.8;margin-bottom:2rem;max-width:390px}
+.faq-list{border-top:1px solid #D8E5EF}.faq-item{border-bottom:1px solid #D8E5EF;padding:1.3rem 0}
+.faq-item summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1.5rem;color:#17334B;font-weight:800;font-size:.96rem}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:after{content:"+";display:grid;place-items:center;width:30px;height:30px;flex:0 0 30px;border:1px solid #C8DCEB;border-radius:50%;color:#0877C9;font-size:1.2rem;transition:transform .3s,background .3s,color .3s}
+.faq-item[open] summary:after{content:"−";transform:rotate(180deg);background:#0877C9;color:white}
+.faq-item p{color:#64798C;line-height:1.8;font-size:.88rem;padding:1rem 2.5rem 0 0;animation:connectaReveal .35s var(--motion-ease) both}
+@media(max-width:1050px){nav{gap:1rem}nav a{font-size:.75rem}}
+@media(max-width:850px){.showcase-heading{display:block}.showcase-heading>p{margin-top:1rem}.solution-panel{grid-template-columns:1fr}.solution-visual{min-height:260px}.process-track{grid-template-columns:repeat(2,1fr);row-gap:2.5rem}.process-track:before{display:none}.faq-layout{grid-template-columns:1fr}}
+@media(max-width:600px){.process-track{grid-template-columns:1fr;margin-top:2.5rem}.process-step{display:grid;grid-template-columns:48px 1fr;column-gap:1rem}.process-index{grid-column:1}.process-node{grid-column:1;grid-row:2/span 2;margin:.7rem 0 0}.process-step h3,.process-step p{grid-column:2}.process-step h3{grid-row:1}.process-step p{grid-row:2}.solution-tabs{gap:.4rem}.solution-tab{padding:.7rem .9rem;font-size:.65rem}.solution-visual{min-height:230px}#hero:after{width:100vw;right:-45%}}
+@media(prefers-reduced-motion:reduce){#hero:after,.hero-stat,.visual-orbit,.visual-core,.visual-line,.process-node span{animation:none!important}.solution-panel-copy,.faq-item p{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -706,6 +776,9 @@ footer {
    <a href="#sobre">Empresa</a>
    <a href="#servicos">Serviços</a>
    <a href="#diferenciais">Diferenciais</a>
+   <a href="#solucoes">Soluções</a>
+   <a href="#processo">Processo</a>
+   <a href="#duvidas">FAQ</a>
    <a href="#contato" class="btn-nav">Falar com a equipe</a>
   </nav>
   <button class="hamburger" aria-label="Abrir menu" aria-expanded="false" id="hamburger">
@@ -718,6 +791,9 @@ footer {
  <a href="#sobre" class="mobile-link">Empresa</a>
  <a href="#servicos" class="mobile-link">Serviços</a>
  <a href="#diferenciais" class="mobile-link">Diferenciais</a>
+ <a href="#solucoes" class="mobile-link">Soluções</a>
+ <a href="#processo" class="mobile-link">Processo</a>
+ <a href="#duvidas" class="mobile-link">Perguntas frequentes</a>
  <a href="#contato" class="mobile-link">Contato</a>
 </div>
 
@@ -911,7 +987,50 @@ footer {
  </div>
 </section>
 
+<!-- SOLUÇÕES / ABA INTERATIVA -->
+<section id="solucoes" class="section showcase-section" aria-labelledby="solucoes-titulo">
+ <div class="section-inner">
+  <div class="showcase-heading"><div><div class="section-label"><span>Áreas de atuação</span></div><h2 id="solucoes-titulo">Infraestrutura que conecta cada parte da operação.</h2></div><p>Uma visão integrada de energia, conectividade, segurança e controle para ambientes comerciais e industriais.</p></div>
+  <div class="solution-tabs" role="tablist" aria-label="Categorias de soluções">
+   <button class="solution-tab active" role="tab" aria-selected="true" aria-controls="solution-panel" data-solution="energia">Energia</button>
+   <button class="solution-tab" role="tab" aria-selected="false" aria-controls="solution-panel" data-solution="conectividade">Conectividade</button>
+   <button class="solution-tab" role="tab" aria-selected="false" aria-controls="solution-panel" data-solution="seguranca">Segurança</button>
+   <button class="solution-tab" role="tab" aria-selected="false" aria-controls="solution-panel" data-solution="automacao">Automação</button>
+  </div>
+  <div class="solution-panel" id="solution-panel" role="tabpanel" tabindex="0">
+   <div class="solution-panel-copy"><span class="solution-kicker" id="solution-kicker">01 / ENERGIA</span><h3 id="solution-title">Energia com precisão em cada conexão.</h3><p id="solution-description">Instalações, manutenções e montagem de quadros elétricos pensadas para segurança, organização e continuidade operacional.</p><a class="solution-link" href="#contato">Solicitar avaliação <span aria-hidden="true">↗</span></a></div>
+   <div class="solution-visual" data-mode="energia" aria-hidden="true"><div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div><div class="visual-core"><span>CONNECTA</span><strong>01</strong></div><div class="visual-line line-one"></div><div class="visual-line line-two"></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- PROCESSO / ABA NOVA -->
+<section id="processo" class="section process-section" aria-labelledby="processo-titulo">
+ <div class="section-inner"><div class="section-label"><span>Fluxo de trabalho</span></div><h2 id="processo-titulo">Do primeiro contato à entrega, sem ruído.</h2><p class="process-lead">Um caminho claro para entender a necessidade, definir o escopo e acompanhar a execução.</p>
+  <div class="process-track">
+   <article class="process-step"><span class="process-index">01</span><div class="process-node"><span></span></div><h3>Entendimento</h3><p>Recebemos as informações e entendemos o cenário da operação.</p></article>
+   <article class="process-step"><span class="process-index">02</span><div class="process-node"><span></span></div><h3>Avaliação técnica</h3><p>Analisamos os requisitos e alinhamos os detalhes necessários.</p></article>
+   <article class="process-step"><span class="process-index">03</span><div class="process-node"><span></span></div><h3>Planejamento</h3><p>Organizamos escopo, prioridades e próximos passos com clareza.</p></article>
+   <article class="process-step"><span class="process-index">04</span><div class="process-node"><span></span></div><h3>Execução</h3><p>Acompanhamos a realização do serviço e a comunicação da entrega.</p></article>
+  </div>
+ </div>
+</section>
+
+<!-- PERGUNTAS FREQUENTES -->
+<section id="duvidas" class="section faq-section" aria-labelledby="duvidas-titulo">
+ <div class="section-inner faq-layout"><div class="faq-heading"><div class="section-label"><span>Perguntas frequentes</span></div><h2 id="duvidas-titulo">Informação clara. Decisões melhores.</h2><p>Algumas respostas para começar a conversa com a equipe Connecta.</p><a class="btn-primary" href="#contato">Fale com a equipe <span aria-hidden="true">↗</span></a></div>
+  <div class="faq-list">
+   <details class="faq-item"><summary>Quais serviços a Connecta atende?</summary><p>Instalações e manutenções elétricas, montagem de quadros, redes de dados e racks, detecção de incêndio e automação industrial.</p></details>
+   <details class="faq-item"><summary>Posso solicitar mais de um serviço?</summary><p>Sim. Descreva os serviços relacionados à sua necessidade no formulário de contato para que a equipe avalie o escopo.</p></details>
+   <details class="faq-item"><summary>Como envio informações técnicas ou arquivos?</summary><p>Entre em contato com a equipe e informe quais documentos ou imagens ajudam a contextualizar o projeto.</p></details>
+   <details class="faq-item"><summary>Como acompanho minha solicitação?</summary><p>Após o registro, a equipe Connecta poderá orientar você sobre os próximos passos e o acompanhamento do atendimento.</p></details>
+   <details class="faq-item"><summary>O envio do formulário confirma a contratação?</summary><p>Não. O formulário inicia um contato. Escopo, orçamento e contratação são alinhados posteriormente com a equipe.</p></details>
+  </div>
+ </div>
+</section>
+
 <!-- CONTATO -->
+
 <section id="contato" class="section" aria-labelledby="contato-titulo">
  <div class="section-inner">
   <div class="contato-grid">
@@ -927,7 +1046,7 @@ footer {
       </div>
       <div>
        <div class="contato-item-label">WhatsApp</div>
-       <div class="contato-item-value">A definir</div>
+       <div class="contato-item-value">+55 (61) 8606-3653</div>
       </div>
      </div>
      <div class="contato-item">
@@ -1039,6 +1158,9 @@ footer {
     <li><a href="#sobre">Empresa</a></li>
     <li><a href="#servicos">Serviços</a></li>
     <li><a href="#diferenciais">Diferenciais</a></li>
+    <li><a href="#solucoes">Soluções</a></li>
+    <li><a href="#processo">Processo</a></li>
+    <li><a href="#duvidas">Perguntas frequentes</a></li>
     <li><a href="#contato">Contato</a></li>
    </ul>
   </div>
@@ -1060,7 +1182,7 @@ footer {
 </footer>
 
 <!-- WhatsApp float (configure o número) -->
-<a href="https://wa.me/5500000000000" class="wpp-float" aria-label="Falar pelo WhatsApp" target="_blank" rel="noopener noreferrer">
+<a href="https://wa.me/556186063653" class="wpp-float" aria-label="Falar pelo WhatsApp" target="_blank" rel="noopener noreferrer">
  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
@@ -1263,6 +1385,20 @@ telInput?.addEventListener('input', () => {
  else if (v.length) v = `(${v}`;
  telInput.value = v;
 });
+
+// CONNECTA INTERACTIVE SOLUTION TABS
+const solutionData={
+ energia:{kicker:"01 / ENERGIA",title:"Energia com precisão em cada conexão.",description:"Instalações, manutenções e montagem de quadros elétricos pensadas para segurança, organização e continuidade operacional."},
+ conectividade:{kicker:"02 / CONECTIVIDADE",title:"Informação fluindo com estrutura.",description:"Redes de dados, infraestrutura de cabeamento e racks organizados para conectar pessoas, equipamentos e sistemas."},
+ seguranca:{kicker:"03 / SEGURANÇA",title:"Proteção integrada ao ambiente.",description:"Infraestrutura para sistemas de detecção de incêndio e soluções que apoiam a segurança das instalações."},
+ automacao:{kicker:"04 / AUTOMAÇÃO",title:"Controle inteligente da operação.",description:"Soluções de automação industrial para integrar processos, equipamentos e informações operacionais."}
+};
+document.querySelectorAll(".solution-tab").forEach(tab=>tab.addEventListener("click",()=>{
+ const data=solutionData[tab.dataset.solution];if(!data)return;
+ document.querySelectorAll(".solution-tab").forEach(other=>{const active=other===tab;other.classList.toggle("active",active);other.setAttribute("aria-selected",String(active));});
+ const copy=document.querySelector(".solution-panel-copy");copy.style.animation="none";
+ requestAnimationFrame(()=>{document.getElementById("solution-kicker").textContent=data.kicker;document.getElementById("solution-title").textContent=data.title;document.getElementById("solution-description").textContent=data.description;document.querySelector(".solution-visual").dataset.mode=tab.dataset.solution;copy.style.animation="";});
+}));
 </script>
 <script src="/app-config.js"></script>
 <script src="/public-orders.js"></script>
