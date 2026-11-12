@@ -63,6 +63,8 @@
     customers: { title: 'Clientes cadastrados', breadcrumb: 'CLIENTES' },
     services:  { title: 'Serviços e soluções', breadcrumb: 'SERVIÇOS' },
     settings:  { title: 'Configurações do sistema', breadcrumb: 'CONFIGURAÇÕES' },
+    reports:   { title: 'Relatórios e desempenho', breadcrumb: 'RELATÓRIOS' },
+    activity:  { title: 'Histórico de atividades', breadcrumb: 'ATIVIDADES' },
   };
 
   function setView(view) {
@@ -77,6 +79,8 @@
     else if (view === 'customers') loadCustomers();
     else if (view === 'services') loadServices();
     else if (view === 'settings') loadSettings();
+    else if (view === 'reports') loadReports();
+    else if (view === 'activity') loadActivityLog();
   }
 
   async function signIn(event) {
@@ -203,11 +207,26 @@
       return `<div class="chart-row"><span class="chart-label">${escapeHtml(label)}</span><div class="chart-track"><div class="chart-fill" style="width:${width}%"></div></div><strong class="chart-value">${value}</strong></div>`;
     }).join('');
 
-    const [activityResult, recentResult] = await Promise.all([
+    const [activityResult, recentResult, trendResult] = await Promise.all([
       supabaseClient.from('order_history').select('id,order_number,action,status_from,status_to,note,actor_label,created_at').order('created_at', { ascending: false }).limit(7),
       supabaseClient.from('orders').select('id,order_number,customer_name,customer_company,status,created_at,order_items(service_name)').order('created_at', { ascending: false }).limit(6),
+      supabaseClient.from('orders').select('created_at').gte('created_at', new Date(new Date().getFullYear(), new Date().getMonth() - 5, 1).toISOString()).order('created_at', { ascending: true }).limit(1000),
     ]);
     if (!activityResult.error) renderActivities(activityResult.data || []);
+    if (!trendResult.error) {
+      const now = new Date();
+      const months = Array.from({ length: 6 }, (_, index) => new Date(now.getFullYear(), now.getMonth() - 5 + index, 1));
+      const totals = months.map((month) => (trendResult.data || []).filter((item) => {
+        const date = new Date(item.created_at);
+        return date.getFullYear() === month.getFullYear() && date.getMonth() === month.getMonth();
+      }).length);
+      const peak = Math.max(1, ...totals);
+      $('dashboardTrendChart').innerHTML = months.map((month, index) => {
+        const label = new Intl.DateTimeFormat('pt-BR', { month: 'short' }).format(month).replace('.', '');
+        const height = totals[index] ? Math.max(7, (totals[index] / peak) * 100) : 2;
+        return '<div class="trend-column"><div class="trend-bar-zone" title="' + totals[index] + ' pedido(s)"><span class="trend-bar" style="--bar-height:' + height + '%"></span></div><strong>' + totals[index] + '</strong><small>' + escapeHtml(label) + '</small></div>';
+      }).join('');
+    }
     if (!recentResult.error) $('recentOrdersBody').innerHTML = (recentResult.data || []).length
       ? recentResult.data.map((order) => recentOrderRow(order)).join('')
       : '<tr><td colspan="6" class="table-empty">Nenhum pedido registrado ainda.</td></tr>';
@@ -809,6 +828,125 @@
     return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   }
 
+
+  function animateAdminNumber(id,target,suffix=''){
+    const element=$(id);if(!element)return;
+    const start=Number(String(element.textContent).replace(/[^\d]/g,''))||0;
+    const end=Number(target)||0;
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){element.textContent=end.toLocaleString('pt-BR')+suffix;return;}
+    const started=performance.now(),duration=850;
+    const frame=(now)=>{
+      const progress=Math.min(1,(now-started)/duration),eased=1-Math.pow(1-progress,4);
+      element.textContent=Math.round(start+(end-start)*eased).toLocaleString('pt-BR')+suffix;
+      if(progress<1)requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+
+  async function loadReports(){
+    if(!supabaseClient||!currentAdmin)return;
+    const range=$('reportRange').value;
+    let query=supabaseClient.from('orders').select('id,order_number,status,created_at,order_items(service_name)').order('created_at',{ascending:true}).limit(1000);
+    if(range!=='all'){const days=Number(range)||90,since=new Date();since.setDate(since.getDate()-days);query=query.gte('created_at',since.toISOString());}
+    const {data,error}=await query;
+    if(error){notify('Não foi possível carregar os relatórios: '+error.message,'error');return;}
+    const orders=data||[];
+    const completed=orders.filter(order=>order.status==='concluido').length;
+    const canceled=orders.filter(order=>order.status==='cancelado').length;
+    const open=Math.max(0,orders.length-completed-canceled);
+    const rate=orders.length?Math.round(completed/orders.length*100):0;
+    animateAdminNumber('reportTotal',orders.length);
+    animateAdminNumber('reportCompleted',completed);
+    animateAdminNumber('reportOpen',open);
+    animateAdminNumber('reportRate',rate,'%');
+
+    const sixMonthsSince=new Date(new Date().getFullYear(),new Date().getMonth()-5,1);
+    const {data:trendData,error:trendError}=await supabaseClient.from('orders').select('created_at')
+      .gte('created_at',sixMonthsSince.toISOString()).order('created_at',{ascending:true}).limit(1000);
+    if(trendError)notify('Indicadores carregados, mas a série mensal falhou: '+trendError.message,'error');
+    const now=new Date();
+    const months=Array.from({length:6},(_,index)=>new Date(now.getFullYear(),now.getMonth()-5+index,1));
+    const monthTotals=months.map(month=>(trendData||[]).filter(item=>{
+      const date=new Date(item.created_at);
+      return date.getFullYear()===month.getFullYear()&&date.getMonth()===month.getMonth();
+    }).length);
+    const maxMonth=Math.max(1,...monthTotals),width=760,height=210,left=28,top=18;
+    const graphWidth=width-left*2,graphHeight=height-top-28;
+    const points=monthTotals.map((value,index)=>({x:left+index*graphWidth/(months.length-1),y:top+graphHeight-(value/maxMonth)*graphHeight,value}));
+    const polyline=points.map(point=>point.x.toFixed(1)+','+point.y.toFixed(1)).join(' ');
+    const areaPath='M '+points[0].x+' '+(top+graphHeight)+' L '+points.map(point=>point.x+' '+point.y).join(' L ')+' L '+points[points.length-1].x+' '+(top+graphHeight)+' Z';
+    const circles=points.map((point,index)=>'<circle class="report-point" style="animation-delay:'+(index*90)+'ms" cx="'+point.x+'" cy="'+point.y+'" r="5"><title>'+point.value+' pedido(s)</title></circle>').join('');
+    const grid=[0,1,2,3].map(step=>'<line class="grid-line" x1="'+left+'" x2="'+(width-left)+'" y1="'+(top+graphHeight*step/3)+'" y2="'+(top+graphHeight*step/3)+'"/>').join('');
+    $('reportTimeline').innerHTML='<svg class="report-line-svg" viewBox="0 0 '+width+' '+height+'" role="img" aria-label="Pedidos mensais: '+monthTotals.join(', ')+'"><defs><linearGradient id="reportAreaGradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#139bd0" stop-opacity=".32"/><stop offset="100%" stop-color="#139bd0" stop-opacity="0"/></linearGradient></defs>'+grid+'<path class="report-area" d="'+areaPath+'"/><polyline class="report-line" pathLength="1" points="'+polyline+'"/>'+circles+'</svg><div class="report-month-labels">'+months.map(month=>'<span>'+escapeHtml(new Intl.DateTimeFormat('pt-BR',{month:'short'}).format(month).replace('.',''))+'</span>').join('')+'</div>';
+
+    const serviceCounts={};
+    orders.forEach(order=>(order.order_items||[]).forEach(item=>{
+      const name=item.service_name||'Serviço não identificado';
+      serviceCounts[name]=(serviceCounts[name]||0)+1;
+    }));
+    const topServices=Object.entries(serviceCounts).sort((a,b)=>b[1]-a[1]).slice(0,6);
+    const maxService=Math.max(1,...topServices.map(entry=>entry[1]));
+    $('reportServices').innerHTML=topServices.length?topServices.map(([name,count])=>
+      '<div class="report-service-row"><strong title="'+escapeHtml(name)+'">'+escapeHtml(name)+'</strong><small>'+count+'</small><div class="report-service-track"><div class="report-service-fill" style="--fill:'+((count/maxService)*100).toFixed(1)+'%"></div></div></div>'
+    ).join(''):'<div class="empty-state">Ainda não há serviços associados aos pedidos deste período.</div>';
+
+    const bestMonthIndex=monthTotals.indexOf(Math.max(...monthTotals));
+    const bestMonth=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(months[bestMonthIndex]);
+    const topServiceText=topServices[0]?topServices[0][0]:'sem dados suficientes';
+    $('reportInsights').innerHTML=
+      '<article class="report-insight"><strong>'+orders.length.toLocaleString('pt-BR')+' solicitações</strong><p>Volume de pedidos no intervalo selecionado, com base nos registros disponíveis.</p></article>'+
+      '<article class="report-insight"><strong>'+rate+'% de conclusão</strong><p>'+completed+' pedidos concluídos de '+orders.length+' registrados. '+canceled+' cancelados não entram no volume em aberto.</p></article>'+
+      '<article class="report-insight"><strong>'+escapeHtml(topServiceText)+'</strong><p>Serviço com maior frequência no período. Mês de maior entrada: '+escapeHtml(bestMonth)+' ('+Math.max(...monthTotals)+' pedidos).</p></article>';
+    $('reportUpdated').textContent='Atualizado em '+formatDate(new Date().toISOString());
+  }
+
+  async function loadActivityLog(){
+    if(!supabaseClient||!currentAdmin)return;
+    const {data,error}=await supabaseClient.from('order_history')
+      .select('id,order_number,action,status_from,status_to,note,actor_label,created_at')
+      .order('created_at',{ascending:false}).limit(60);
+    if(error){notify('Não foi possível carregar o histórico: '+error.message,'error');return;}
+    const items=data||[];
+    $('activityCount').textContent=items.length.toLocaleString('pt-BR');
+    $('activityFeed').innerHTML=items.length?items.map(item=>{
+      const icon=item.action==='pedido_criado'?'+':item.action==='status_alterado'?'↻':'·';
+      return '<div class="activity-feed-item"><span class="activity-feed-mark">'+icon+'</span><div class="activity-feed-copy"><p>'+activityDescription(item)+'</p><small>'+escapeHtml(item.actor_label||'Sistema')+' · '+formatDate(item.created_at)+'</small></div></div>';
+    }).join(''):'<div class="empty-state">Ainda não há movimentações registradas.</div>';
+  }
+
+  function exportOrdersCsv(){
+    if(!supabaseClient||!currentAdmin)return;
+    notify('Preparando exportação dos pedidos...');
+    supabaseClient.from('orders')
+      .select('order_number,customer_name,customer_company,customer_email,customer_phone,location_address,status,created_at,order_items(service_name)')
+      .order('created_at',{ascending:false}).limit(2000)
+      .then(({data,error})=>{
+        if(error)throw error;
+        const headers=['Pedido','Cliente','Empresa','E-mail','Telefone','Local','Status','Criado em','Serviços'];
+        const rows=(data||[]).map(order=>[
+          order.order_number,order.customer_name,order.customer_company,order.customer_email,
+          order.customer_phone,order.location_address,STATUS_LABEL[order.status]||order.status,
+          formatDate(order.created_at),(order.order_items||[]).map(item=>item.service_name).join('; ')
+        ]);
+        const csv=[headers,...rows].map(row=>row.map(value=>'"'+String(value??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
+        const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+        const url=URL.createObjectURL(blob),link=document.createElement('a');
+        link.href=url;link.download='connecta-pedidos-'+new Date().toISOString().slice(0,10)+'.csv';
+        document.body.appendChild(link);link.click();link.remove();
+        window.setTimeout(()=>URL.revokeObjectURL(url),1200);
+        notify((data||[]).length+' pedido(s) exportado(s) em CSV.','success');
+      }).catch(error=>notify('Falha na exportação: '+(error.message||'erro desconhecido'),'error'));
+  }
+
+  function applyAdminTheme(theme){
+    const allowed=['azure','emerald','violet'];
+    const selected=allowed.includes(theme)?theme:'azure';
+    document.body.dataset.adminTheme=selected;
+    const selector=$('adminThemeSelect');
+    if(selector)selector.value=selected;
+    try{localStorage.setItem('connecta-admin-theme',selected);}catch(_){}
+  }
+
   function bindEvents() {
     $('loginForm').addEventListener('submit', signIn);
     $('forgotPasswordButton').addEventListener('click', forgotPassword);
@@ -816,6 +954,11 @@
     document.querySelectorAll('[data-view-target]').forEach((button) => button.addEventListener('click', () => setView(button.dataset.viewTarget)));
     $('menuToggle').addEventListener('click', () => $('sidebar').classList.toggle('open'));
     $('refreshDashboard').addEventListener('click', loadDashboard);
+    $('reportRange').addEventListener('change', loadReports);
+    $('refreshReports').addEventListener('click', loadReports);
+    $('refreshActivity').addEventListener('click', loadActivityLog);
+    $('exportOrdersButton').addEventListener('click', exportOrdersCsv);
+    $('adminThemeSelect').addEventListener('change', (event) => applyAdminTheme(event.target.value));
     $('refreshOrders').addEventListener('click', loadOrders);
     $('prevPage').addEventListener('click', () => { if (currentPage > 0) { currentPage -= 1; loadOrders(); } });
     $('nextPage').addEventListener('click', () => { if ((currentPage + 1) * PAGE_SIZE < orderCount) { currentPage += 1; loadOrders(); } });
@@ -885,6 +1028,7 @@
 
   async function initialize() {
     $('yearLabel').textContent = new Date().getFullYear();
+    try { applyAdminTheme(localStorage.getItem('connecta-admin-theme') || 'azure'); } catch (_) { applyAdminTheme('azure'); }
     fillStatusOptions();
     bindEvents();
     const configured = Boolean(config.supabaseUrl && config.supabaseAnonKey && window.supabase?.createClient);
