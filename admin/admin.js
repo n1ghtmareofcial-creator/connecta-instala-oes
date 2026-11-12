@@ -759,7 +759,7 @@
 
   async function saveService() {
     const name = $('editServiceName').value.trim();
-    const slug = $('editServiceSlug').value.trim().toLowerCase().replace(/\s+/g, '-');
+    const slug = $('editServiceSlug').value.trim().toLowerCase().replace(/\\s+/g, '-');
     if (!name || !slug) { notify('Nome e slug são obrigatórios.', 'error'); return; }
     const payload = {
       name,
@@ -770,19 +770,69 @@
     };
     const btn = $('saveServiceButton');
     btn.disabled = true;
+    const oldImagePath = currentServiceImagePath;
+    let savedServiceId = currentServiceId;
     try {
-      let error;
-      if (currentServiceId) {
-        ({ error } = await supabaseClient.from('services').update(payload).eq('id', currentServiceId));
+      if (savedServiceId) {
+        const { error } = await supabaseClient.from('services').update(payload).eq('id', savedServiceId);
+        if (error) throw error;
       } else {
-        ({ error } = await supabaseClient.from('services').insert(payload));
+        const { data, error } = await supabaseClient.from('services').insert(payload).select('id').single();
+        if (error) throw error;
+        savedServiceId = data.id;
+        currentServiceId = savedServiceId;
+        $('editServiceId').value = savedServiceId;
+        $('deleteServiceButton').hidden = false;
+        $('serviceDialogTitle').textContent = 'Editar serviço';
       }
-      if (error) throw error;
-      notify(currentServiceId ? 'Serviço atualizado.' : 'Serviço criado.', 'success');
+
+      let imageNotice = '';
+      if (pendingServiceImageFile) {
+        const extensions = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif' };
+        const extension = extensions[pendingServiceImageFile.type];
+        if (!extension) throw new Error('Formato de imagem não aceito.');
+        const newPath = savedServiceId + '/' + crypto.randomUUID() + '.' + extension;
+        const { error: uploadError } = await supabaseClient.storage.from('service-images').upload(newPath, pendingServiceImageFile, {
+          cacheControl: '31536000',
+          contentType: pendingServiceImageFile.type,
+          upsert: false,
+        });
+        if (uploadError) throw new Error('O serviço foi salvo, mas o envio da imagem falhou: ' + uploadError.message);
+
+        const { data: publicData } = supabaseClient.storage.from('service-images').getPublicUrl(newPath);
+        const imageUrl = publicData?.publicUrl;
+        if (!imageUrl) {
+          await supabaseClient.storage.from('service-images').remove([newPath]);
+          throw new Error('O serviço foi salvo, mas não foi possível gerar o endereço da imagem.');
+        }
+        const { error: linkError } = await supabaseClient.from('services')
+          .update({ image_url: imageUrl, image_path: newPath }).eq('id', savedServiceId);
+        if (linkError) {
+          await supabaseClient.storage.from('service-images').remove([newPath]);
+          throw new Error('O serviço foi salvo, mas não foi possível vincular a imagem: ' + linkError.message);
+        }
+        if (oldImagePath && oldImagePath !== newPath) {
+          const { error: cleanupError } = await supabaseClient.storage.from('service-images').remove([oldImagePath]);
+          if (cleanupError) imageNotice = ' A imagem anterior não pôde ser removida do armazenamento.';
+        }
+        resetServiceImageEditor(imageUrl, newPath);
+      } else if (removeCurrentServiceImage) {
+        const { error: linkError } = await supabaseClient.from('services')
+          .update({ image_url: null, image_path: null }).eq('id', savedServiceId);
+        if (linkError) throw new Error('O serviço foi salvo, mas não foi possível remover a imagem: ' + linkError.message);
+        if (oldImagePath) {
+          const { error: cleanupError } = await supabaseClient.storage.from('service-images').remove([oldImagePath]);
+          if (cleanupError) imageNotice = ' A imagem foi desvinculada, mas o arquivo antigo permaneceu no armazenamento.';
+        }
+        resetServiceImageEditor();
+      }
+
+      notify('Serviço salvo.' + imageNotice, imageNotice ? 'error' : 'success');
       $('serviceDialog').close();
       await loadServices();
     } catch (err) {
       notify(err.message || 'Erro ao salvar serviço.', 'error');
+      await loadServices();
     } finally {
       btn.disabled = false;
     }
@@ -792,9 +842,15 @@
     if (!currentServiceId) return;
     if (!window.confirm('Excluir este serviço permanentemente? Pedidos existentes não serão afetados.')) return;
     try {
+      const imagePath = currentServiceImagePath;
       const { error } = await supabaseClient.from('services').delete().eq('id', currentServiceId);
       if (error) throw error;
-      notify('Serviço excluído.', 'success');
+      let cleanupMessage = '';
+      if (imagePath) {
+        const { error: cleanupError } = await supabaseClient.storage.from('service-images').remove([imagePath]);
+        if (cleanupError) cleanupMessage = ' A imagem antiga não pôde ser removida do armazenamento.';
+      }
+      notify('Serviço excluído.' + cleanupMessage, cleanupMessage ? 'error' : 'success');
       $('serviceDialog').close();
       await loadServices();
     } catch (err) {
@@ -1080,6 +1136,8 @@
 
     // Serviços
     $('newServiceButton').addEventListener('click', () => openServiceDialog(null));
+    $('serviceImageInput').addEventListener('change', handleServiceImageSelection);
+    $('removeServiceImageButton').addEventListener('click', clearServiceImageSelection);
     $('servicesBody').addEventListener('click', (e) => {
       const editBtn = e.target.closest('[data-edit-service]');
       if (editBtn) { openServiceDialog(editBtn.dataset.editService); return; }
