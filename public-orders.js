@@ -26,7 +26,10 @@
 
       (services || []).forEach((service) => {
         if (!service.is_active || !service.image_url) return;
-        const card = cards.find((item) => normalize(item.querySelector('h3')?.textContent) === normalize(service.name));
+        const publicCardName = normalize(service.name) === normalize('Outro serviço / avaliação técnica')
+          ? normalize('Precisa de outra solução?')
+          : normalize(service.name);
+        const card = cards.find((item) => normalize(item.querySelector('h3')?.textContent) === publicCardName);
         if (!card) return;
 
         let imageUrl;
