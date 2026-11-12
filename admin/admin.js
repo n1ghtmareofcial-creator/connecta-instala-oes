@@ -28,6 +28,11 @@
   let customersSearchTimer = null;
   let currentCustomerId = null;
   let currentServiceId = null;
+  let currentServiceImagePath = null;
+  let currentServiceImageUrl = null;
+  let pendingServiceImageFile = null;
+  let serviceImagePreviewObjectUrl = null;
+  let removeCurrentServiceImage = false;
   const CUSTOMERS_PAGE_SIZE = 15;
 
   const $ = (id) => document.getElementById(id);
@@ -637,32 +642,98 @@
   /* ═══════════════════════════════════════════
      SERVIÇOS
   ═══════════════════════════════════════════ */
+
+  function renderServiceImagePreview(url, status, kind = '') {
+    const preview = $('serviceImagePreview');
+    preview.replaceChildren();
+    if (url) {
+      const image = document.createElement('img');
+      image.src = url;
+      image.alt = 'Prévia da imagem do serviço';
+      preview.appendChild(image);
+    } else {
+      const empty = document.createElement('span');
+      empty.textContent = 'Nenhuma imagem selecionada';
+      preview.appendChild(empty);
+    }
+    $('serviceImageStatus').textContent = status || 'A imagem aparece no card público quando o serviço está ativo.';
+    $('serviceImageStatus').dataset.kind = kind;
+    $('removeServiceImageButton').hidden = !url;
+  }
+
+  function resetServiceImageEditor(url = null, path = null) {
+    if (serviceImagePreviewObjectUrl) URL.revokeObjectURL(serviceImagePreviewObjectUrl);
+    serviceImagePreviewObjectUrl = null;
+    pendingServiceImageFile = null;
+    removeCurrentServiceImage = false;
+    currentServiceImageUrl = url || null;
+    currentServiceImagePath = path || null;
+    $('serviceImageInput').value = '';
+    renderServiceImagePreview(currentServiceImageUrl, currentServiceImageUrl
+      ? 'Imagem atual. Você pode substituí-la ou removê-la.'
+      : 'A imagem aparece no card público quando o serviço está ativo.');
+  }
+
+  function handleServiceImageSelection(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
+    if (!allowedTypes.includes(file.type)) {
+      event.target.value = '';
+      renderServiceImagePreview(currentServiceImageUrl, 'Formato não aceito. Use JPG, PNG, WEBP ou AVIF.', 'error');
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      event.target.value = '';
+      renderServiceImagePreview(currentServiceImageUrl, 'A imagem ultrapassa o limite de 4 MB.', 'error');
+      return;
+    }
+    if (serviceImagePreviewObjectUrl) URL.revokeObjectURL(serviceImagePreviewObjectUrl);
+    pendingServiceImageFile = file;
+    removeCurrentServiceImage = false;
+    serviceImagePreviewObjectUrl = URL.createObjectURL(file);
+    renderServiceImagePreview(serviceImagePreviewObjectUrl, file.name + ' · pronta para enviar');
+  }
+
+  function clearServiceImageSelection() {
+    pendingServiceImageFile = null;
+    if (serviceImagePreviewObjectUrl) URL.revokeObjectURL(serviceImagePreviewObjectUrl);
+    serviceImagePreviewObjectUrl = null;
+    removeCurrentServiceImage = Boolean(currentServiceImagePath || currentServiceImageUrl);
+    $('serviceImageInput').value = '';
+    renderServiceImagePreview(null, removeCurrentServiceImage
+      ? 'A imagem atual será removida ao salvar.'
+      : 'Seleção de imagem cancelada.');
+  }
+
   async function loadServices() {
     if (!supabaseClient || !currentAdmin) return;
-    $('servicesBody').innerHTML = '<tr><td colspan="5" class="table-empty">Carregando...</td></tr>';
+    $('servicesBody').innerHTML = '<tr><td colspan="6" class="table-empty">Carregando...</td></tr>';
     const { data, error } = await supabaseClient.from('services').select('*').order('sort_order');
     if (error) {
-      $('servicesBody').innerHTML = `<tr><td colspan="5" class="table-empty">Erro: ${escapeHtml(error.message)}</td></tr>`;
+      $('servicesBody').innerHTML = '<tr><td colspan="6" class="table-empty">Erro: ' + escapeHtml(error.message) + '</td></tr>';
       return;
     }
     const rows = data || [];
-    $('servicesCount').textContent = `${rows.length} serviço(s) cadastrado(s)`;
-    $('servicesBody').innerHTML = rows.length ? rows.map((s) => `
-      <tr>
-        <td style="font-weight:800;color:#8295a3;font-size:.7rem;text-align:center">${s.sort_order}</td>
-        <td><strong style="font-size:.73rem;color:var(--navy)">${escapeHtml(s.name)}</strong><div style="font-size:.62rem;color:#9aa7b2;margin-top:.2rem">${escapeHtml(s.slug)}</div></td>
-        <td style="font-size:.67rem;color:#607589;max-width:280px">${escapeHtml(s.description || '—')}</td>
-        <td><button class="service-active-toggle ${s.is_active ? 'on' : 'off'}" data-service-toggle="${escapeHtml(s.id)}" data-service-active="${s.is_active}">${s.is_active ? '● Ativo' : '○ Inativo'}</button></td>
-        <td><button class="row-action" data-edit-service="${escapeHtml(s.id)}">Editar</button></td>
-      </tr>
-    `).join('') : '<tr><td colspan="5" class="table-empty">Nenhum serviço cadastrado.</td></tr>';
+    $('servicesCount').textContent = rows.length + ' serviço(s) cadastrado(s)';
+    $('servicesBody').innerHTML = rows.length ? rows.map((s) =>
+      '<tr>' +
+        '<td style="font-weight:800;color:#8295a3;font-size:.7rem;text-align:center">' + s.sort_order + '</td>' +
+        '<td><strong style="font-size:.73rem;color:var(--navy)">' + escapeHtml(s.name) + '</strong><div style="font-size:.62rem;color:#9aa7b2;margin-top:.2rem">' + escapeHtml(s.slug) + '</div></td>' +
+        '<td style="font-size:.67rem;color:#607589;max-width:280px">' + escapeHtml(s.description || '—') + '</td>' +
+        '<td><div class="service-table-image">' + (s.image_url ? '<img src="' + escapeHtml(s.image_url) + '" alt="Imagem de ' + escapeHtml(s.name) + '">' : '<span>Sem imagem</span>') + '</div></td>' +
+        '<td><button class="service-active-toggle ' + (s.is_active ? 'on' : 'off') + '" data-service-toggle="' + escapeHtml(s.id) + '" data-service-active="' + s.is_active + '">' + (s.is_active ? '● Ativo' : '○ Inativo') + '</button></td>' +
+        '<td><button class="row-action" data-edit-service="' + escapeHtml(s.id) + '">Editar</button></td>' +
+      '</tr>'
+    ).join('') : '<tr><td colspan="6" class="table-empty">Nenhum serviço cadastrado.</td></tr>';
   }
 
-  function openServiceDialog(serviceId = null) {
+  async function openServiceDialog(serviceId = null) {
     currentServiceId = serviceId;
     $('editServiceId').value = serviceId || '';
     $('serviceDialogTitle').textContent = serviceId ? 'Editar serviço' : 'Novo serviço';
     $('deleteServiceButton').hidden = !serviceId;
+    resetServiceImageEditor();
 
     if (!serviceId) {
       $('editServiceName').value = '';
@@ -671,14 +742,17 @@
       $('editServiceOrder').value = '10';
       $('editServiceActive').checked = true;
     } else {
-      supabaseClient.from('services').select('*').eq('id', serviceId).single().then(({ data: s }) => {
-        if (!s) return;
-        $('editServiceName').value = s.name;
-        $('editServiceSlug').value = s.slug;
-        $('editServiceDesc').value = s.description || '';
-        $('editServiceOrder').value = s.sort_order;
-        $('editServiceActive').checked = s.is_active;
-      });
+      const { data: s, error } = await supabaseClient.from('services').select('*').eq('id', serviceId).single();
+      if (error || !s) {
+        notify(error?.message || 'Não foi possível carregar o serviço.', 'error');
+        return;
+      }
+      $('editServiceName').value = s.name;
+      $('editServiceSlug').value = s.slug;
+      $('editServiceDesc').value = s.description || '';
+      $('editServiceOrder').value = s.sort_order;
+      $('editServiceActive').checked = s.is_active;
+      resetServiceImageEditor(s.image_url || null, s.image_path || null);
     }
     $('serviceDialog').showModal();
   }
